@@ -152,9 +152,7 @@ function ItemDetail() {
               <div
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-soft leading-none"
                 style={{ backgroundColor: owner.avatarColor }}
-              >
-                {owner.name[0]}
-              </div>
+              >{owner.name[0]}</div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 text-sm font-semibold">
                   {owner.name}

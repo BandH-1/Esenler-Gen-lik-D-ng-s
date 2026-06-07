@@ -63,9 +63,7 @@ function ProfilePage() {
           <div
             className="flex h-24 w-24 items-center justify-center rounded-full text-3xl font-bold text-white shadow-lift ring-4 ring-card leading-none"
             style={{ backgroundColor: user.avatarColor }}
-          >
-            {user.name[0]}
-          </div>
+          >{user.name[0]}</div>
           <div className="text-center">
             <div className="flex items-center justify-center gap-1.5 font-display text-lg font-bold">
               {user.name}
