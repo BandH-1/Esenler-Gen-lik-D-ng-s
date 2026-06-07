@@ -66,6 +66,7 @@ interface StoreState {
   approveItem: (itemId: string) => void;
   rejectItem: (itemId: string) => void;
   reportItem: (itemId: string, reason: string) => void;
+  updateItemImage: (itemId: string, emoji: string) => void;
 
   // Eko-Puan admin operations
   retrySyncTx: (txId: string) => void;
@@ -373,6 +374,13 @@ export const useStore = create<StoreState>((set, get) => ({
     set((s) => ({
       items: s.items.map((i) =>
         i.id === itemId ? { ...i, status: "kaldirildi" } : i,
+      ),
+    })),
+
+  updateItemImage: (itemId, emoji) =>
+    set((s) => ({
+      items: s.items.map((i) =>
+        i.id === itemId ? { ...i, images: [emoji] } : i,
       ),
     })),
 

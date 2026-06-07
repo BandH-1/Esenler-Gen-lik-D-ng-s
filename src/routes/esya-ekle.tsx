@@ -28,13 +28,13 @@ export const Route = createFileRoute("/esya-ekle")({
   component: AddItemPage,
 });
 
-const CATEGORY_EMOJI: Record<Category, string> = {
-  kitap: "📚",
-  kiyafet: "👕",
-  okul: "🎒",
-  elektronik: "🎧",
-  spor: "⚽",
-  yurt: "🛏️",
+const CATEGORY_EMOJIS: Record<Category, string[]> = {
+  kitap: ["📚", "📖", "📓", "📝", "✍️"],
+  kiyafet: ["👕", "👗", "🧥", "👖", "👟", "🧢"],
+  okul: ["🎒", "✏️", "📐", "🎨", "🧪", "🧮"],
+  elektronik: ["🎧", "📟", "💻", "📱", "🎮", "🔌", "🔋", "⌨️"],
+  spor: ["⚽", "🏀", "🛹", "🥋", "🏸", "🏋️"],
+  yurt: ["🛏️", "🛋️", "🧴", "☕", "🔌", "🪞"],
 };
 
 function AddItemPage() {
@@ -54,6 +54,11 @@ function AddItemPage() {
   const [attrSubject, setAttrSubject] = useState("");
   const [attrSize, setAttrSize] = useState("");
   const [consent, setConsent] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("📚");
+
+  useEffect(() => {
+    setSelectedEmoji(CATEGORY_EMOJIS[category][0]);
+  }, [category]);
 
   const reward = calculateEcoPoints(category, condition);
 
@@ -68,7 +73,7 @@ function AddItemPage() {
       description,
       category,
       condition,
-      images: [CATEGORY_EMOJI[category]],
+      images: [selectedEmoji],
       neighborhood,
       handoverPointId: handover,
       attributes,
@@ -87,14 +92,47 @@ function AddItemPage() {
       </div>
 
       <form onSubmit={submit} className="flex flex-col gap-4">
-        {/* Photo placeholder */}
-        <Section title="Fotoğraf" delay={40}>
-          <div className="group grid aspect-[5/3] cursor-pointer place-items-center rounded-2xl border-2 border-dashed bg-secondary/40 text-center transition-all duration-300 hover:border-primary/40 hover:bg-secondary/60">
-            <div className="flex flex-col items-center gap-1 text-muted-foreground">
-              <Camera className="h-7 w-7 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110" />
-              <div className="text-xs font-medium">Fotoğraf ekle (yer tutucu)</div>
-              <div className="text-[10px]">
-                Yüz, ev veya adres içeren fotoğraf yükleme.
+        {/* Photo & Emoji Selector */}
+        <Section title="Ürün Görseli" delay={40}>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {/* Büyük Gösterim */}
+            <div className="relative grid aspect-square sm:aspect-auto sm:h-full place-items-center overflow-hidden rounded-2xl border bg-gradient-to-br from-secondary via-card to-background shadow-soft min-h-[120px]">
+              <div
+                className="pointer-events-none absolute inset-0 opacity-40"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 40%, color-mix(in oklch, var(--accent) 15%, transparent), transparent 60%)",
+                }}
+              />
+              <span className="relative text-6xl drop-shadow-md">{selectedEmoji}</span>
+            </div>
+            
+            {/* Alternatif Seçici */}
+            <div className="sm:col-span-2 flex flex-col justify-between gap-3">
+              <div>
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
+                  Temsili Görsel Seçin
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORY_EMOJIS[category].map((emoji) => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => setSelectedEmoji(emoji)}
+                      className={`h-11 w-11 text-2xl grid place-items-center rounded-xl border transition-all duration-200 active:scale-95 cursor-pointer ${
+                        selectedEmoji === emoji
+                          ? "bg-primary/10 border-primary shadow-soft text-primary font-bold scale-105"
+                          : "bg-background/60 hover:bg-secondary hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="text-[11px] text-muted-foreground flex items-start gap-1.5 rounded-xl bg-secondary/50 p-2.5 border">
+                <Info className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                <span>Uygulamamızda gizlilik gereği gerçek fotoğraf yerine ürünü en iyi temsil eden simgeyi seçebilirsiniz.</span>
               </div>
             </div>
           </div>
