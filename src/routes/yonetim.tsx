@@ -61,7 +61,7 @@ import {
 export const Route = createFileRoute("/yonetim")({
   head: () => ({
     meta: [
-      { title: "Belediye Yönetim Paneli — Gençlik Döngüsü" },
+      { title: "Belediye Yönetim Paneli — eştakas" },
       {
         name: "description",
         content:
@@ -106,7 +106,7 @@ function AdminPage() {
             Belediye Yönetim Paneli
           </h1>
           <p className="text-sm text-muted-foreground">
-            Esenler Belediyesi · Gençlik Döngüsü
+            Esenler Belediyesi · eştakas
           </p>
         </div>
       </div>

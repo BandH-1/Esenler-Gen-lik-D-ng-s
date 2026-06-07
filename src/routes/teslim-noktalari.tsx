@@ -7,7 +7,7 @@ import { Reveal } from "@/components/common/Reveal";
 export const Route = createFileRoute("/teslim-noktalari")({
   head: () => ({
     meta: [
-      { title: "Teslim Noktaları — Gençlik Döngüsü" },
+      { title: "Teslim Noktaları — eştakas" },
       {
         name: "description",
         content:

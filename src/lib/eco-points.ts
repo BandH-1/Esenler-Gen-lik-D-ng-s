@@ -149,7 +149,7 @@ export function downloadTxPdf(
   doc.setTextColor(100);
   doc.text(
     fold(
-      `Olusturma: ${new Date().toLocaleString("tr-TR")} — Esenler Belediyesi / Genclik Dongusu`,
+      `Olusturma: ${new Date().toLocaleString("tr-TR")} — Esenler Belediyesi / estakas`,
     ),
     14,
     22,

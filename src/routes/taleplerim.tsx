@@ -18,7 +18,7 @@ import {
 export const Route = createFileRoute("/taleplerim")({
   head: () => ({
     meta: [
-      { title: "Taleplerim — Gençlik Döngüsü" },
+      { title: "Taleplerim — eştakas" },
       { name: "description", content: "Talep ettiğin eşyaların durumu ve QR kodları." },
     ],
   }),

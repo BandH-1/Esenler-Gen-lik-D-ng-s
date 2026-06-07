@@ -23,7 +23,7 @@ type SearchParams = {
 export const Route = createFileRoute("/ilanlar/")({
   head: () => ({
     meta: [
-      { title: "İlanlar — Gençlik Döngüsü" },
+      { title: "İlanlar — eştakas" },
       {
         name: "description",
         content:

@@ -29,8 +29,8 @@ export const Route = createFileRoute("/ilanlar/$itemId")({
     meta: [
       {
         title: loaderData?.title
-          ? `${loaderData.title} — Gençlik Döngüsü`
-          : "İlan — Gençlik Döngüsü",
+          ? `${loaderData.title} — eştakas`
+          : "İlan — eştakas",
       },
       {
         name: "description",

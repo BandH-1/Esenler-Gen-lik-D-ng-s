@@ -79,20 +79,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "Gençlik Döngüsü — Esenler Belediyesi" },
+      { title: "eştakas — Esenler Belediyesi" },
       {
         name: "description",
         content:
           "Esenler'in gençlik dayanışma ve dolaşımlı ekonomi platformu. Eşyanı bağışla, ihtiyaç duyduğunu güvenle al, Eko-Puan kazan.",
       },
       { name: "author", content: "Esenler Belediyesi · Esenlink" },
-      { property: "og:title", content: "Gençlik Döngüsü — Esenler Belediyesi" },
+      { property: "og:title", content: "eştakas — Esenler Belediyesi" },
       {
         property: "og:description",
         content: "Esenler gençleri için ücretsiz, güvenli ve sürdürülebilir takas platformu.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "Gençlik Döngüsü — Esenler Belediyesi" },
+      { name: "twitter:title", content: "eştakas — Esenler Belediyesi" },
       {
         name: "twitter:description",
         content:

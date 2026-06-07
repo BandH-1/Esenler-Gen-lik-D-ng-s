@@ -28,7 +28,7 @@ const CATEGORY_EMOJIS: Record<Category, string[]> = {
 export const Route = createFileRoute("/ilanlarim")({
   head: () => ({
     meta: [
-      { title: "İlanlarım — Gençlik Döngüsü" },
+      { title: "İlanlarım — eştakas" },
       { name: "description", content: "Yayınladığın ilanları yönet." },
     ],
   }),

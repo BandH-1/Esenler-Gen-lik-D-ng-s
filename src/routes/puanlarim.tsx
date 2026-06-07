@@ -32,7 +32,7 @@ import { Reveal } from "@/components/common/Reveal";
 export const Route = createFileRoute("/puanlarim")({
   head: () => ({
     meta: [
-      { title: "Eko-Puan Cüzdanım — Gençlik Döngüsü" },
+      { title: "Eko-Puan Cüzdanım — eştakas" },
       {
         name: "description",
         content:

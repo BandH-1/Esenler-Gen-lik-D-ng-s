@@ -18,7 +18,7 @@ import { Reveal } from "@/components/common/Reveal";
 export const Route = createFileRoute("/profil")({
   head: () => ({
     meta: [
-      { title: "Profilim — Gençlik Döngüsü" },
+      { title: "Profilim — eştakas" },
       { name: "description", content: "Esenlink doğrulamalı gençlik profilin." },
     ],
   }),

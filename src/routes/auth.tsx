@@ -86,7 +86,7 @@ function AuthPage() {
           <Recycle className="h-5 w-5 transition-transform duration-700 group-hover:rotate-180" />
         </div>
         <div className="leading-tight">
-          <div className="font-display text-base font-bold">Gençlik Döngüsü</div>
+          <div className="font-display text-base font-bold">eştakas</div>
           <div className="text-[11px] text-muted-foreground">Esenler Belediyesi · Esenlink</div>
         </div>
       </Link>

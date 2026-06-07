@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Recycle, Coins, LogIn, LogOut } from "lucide-react";
+import { Coins, LogIn, LogOut } from "lucide-react";
+import { BrandMark } from "@/components/common/BrandMark";
 import { useCurrentUser } from "@/lib/mock/store";
 import { useAuth, useProfile, signOut } from "@/hooks/use-auth";
 
@@ -15,14 +16,9 @@ export function Header() {
       <div className="h-0.5 w-full bg-brand opacity-80" />
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 sm:px-4">
         <Link to="/" className="group flex min-w-0 items-center gap-2.5">
-          <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-2xl bg-brand text-primary-foreground shadow-soft transition-transform duration-500 group-hover:scale-105">
-            <Recycle className="h-5 w-5 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-180" />
-            <span className="shimmer-sweep absolute inset-0" />
-          </div>
+          <BrandMark />
           <div className="min-w-0 leading-tight">
-            <div className="truncate font-display text-sm font-bold tracking-tight">
-              Gençlik Döngüsü
-            </div>
+            <div className="truncate font-display text-sm font-bold tracking-tight">eştakas</div>
             <div className="hidden truncate text-[10px] text-muted-foreground sm:block">
               Esenler Belediyesi · Esenlink
             </div>

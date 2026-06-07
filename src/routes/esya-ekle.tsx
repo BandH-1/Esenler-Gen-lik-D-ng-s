@@ -18,7 +18,7 @@ import { moderateItemSubmission, type ItemModerationResult } from "@/lib/moderat
 export const Route = createFileRoute("/esya-ekle")({
   head: () => ({
     meta: [
-      { title: "Eşya Ekle — Gençlik Döngüsü" },
+      { title: "Eşya Ekle — eştakas" },
       {
         name: "description",
         content:
