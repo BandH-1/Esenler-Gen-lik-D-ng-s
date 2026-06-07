@@ -131,27 +131,27 @@ function Home() {
         </div>
       </section>
 
-      {/* Cemil Meriç Quotes Carousel / Section */}
+      {/* Teşvik Edici Paylaşım Sözleri ve Cemil Meriç */}
       <section className="anim-scale-in rounded-[1.8rem] border bg-gradient-to-br from-card to-secondary/30 p-6 shadow-soft backdrop-blur-sm">
         <div className="flex items-center gap-2 mb-3">
           <Sparkles className="h-4 w-4 text-accent" />
-          <h2 className="text-sm font-semibold text-muted-foreground">Cemil Meriç'ten Paylaşım ve Bilgi Üzerine</h2>
+          <h2 className="text-sm font-semibold text-muted-foreground">Paylaşım ve Dayanışma Üzerine</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="flex flex-col justify-center border-r-0 md:border-r pr-0 md:pr-6 border-border">
             <blockquote className="italic text-sm text-foreground/90 font-medium leading-relaxed">
-              "Kendi kendisini tamamlamak, başkalarıyla tamamlanmaktır. Paylaşılmayan güzellik, yarım kalmış bir rüyadır."
+              "Kitap bir limandı benim için. Kitaplarda yaşadım. Ve kitaplardaki insanları sokaktakilerden daha çok sevdim."
             </blockquote>
             <cite className="mt-2 block text-[11px] font-bold text-muted-foreground not-italic">
-              — Cemil Meriç
+              — Cemil Meriç (Bu Ülke)
             </cite>
           </div>
           <div className="flex flex-col justify-center pl-0 md:pl-2">
             <blockquote className="italic text-sm text-foreground/90 font-medium leading-relaxed">
-              "Kitaplar, paylaşıldıkça çoğalan yegâne hazinelerdir. Bir gencin ufkunu açan her kitap, geleceğe atılmış bir köprüdür."
+              "Sahip olduğumuz değil, paylaştığımız şeyler bize değer katar. Eşyalar paylaşıldıkça ömrü uzar, dünya güzelleşir."
             </blockquote>
             <cite className="mt-2 block text-[11px] font-bold text-muted-foreground not-italic">
-              — Cemil Meriç
+              — Paylaşım Kültürü
             </cite>
           </div>
         </div>
