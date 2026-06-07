@@ -242,7 +242,7 @@ function AdminPage() {
             <BarChart data={categoryData}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={11} />
-              <YAxis stroke="var(--muted-foreground)" fontSize={11} />
+              <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
                   background: "var(--card)",
@@ -259,7 +259,7 @@ function AdminPage() {
             <LineChart data={monthly}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="ay" stroke="var(--muted-foreground)" fontSize={11} />
-              <YAxis stroke="var(--muted-foreground)" fontSize={11} />
+              <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
                   background: "var(--card)",
