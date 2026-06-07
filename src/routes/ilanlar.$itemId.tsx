@@ -150,7 +150,7 @@ function ItemDetail() {
           {owner && (
             <div className="anim-fade-up flex items-center gap-3 rounded-2xl border bg-card/80 p-3 shadow-soft backdrop-blur-sm" style={{ animationDelay: "270ms" }}>
               <div
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-bold text-white shadow-soft"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-soft leading-none"
                 style={{ backgroundColor: owner.avatarColor }}
               >
                 {owner.name[0]}
