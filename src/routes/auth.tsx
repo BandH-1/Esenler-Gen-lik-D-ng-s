@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ShieldCheck } from "lucide-react";
+import { Recycle, ShieldCheck } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -97,11 +97,11 @@ function AuthPage() {
             <div className="relative aspect-square overflow-hidden rounded-2xl border bg-secondary/35 shadow-soft max-h-[220px]">
               <img 
                 src="https://img.internethaber.com/rcman/Cw400h400q95_95/storage/files/images/2020/12/30/tevfik-goksu-c9Wz_cover.jpg" 
-                alt="M. Tevfik Göksu" 
+                alt="Mehmet Tevfik Göksu" 
                 className="h-full w-full object-cover"
               />
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-3 text-white">
-                <div className="font-display text-xs font-bold leading-none">M. Tevfik Göksu</div>
+                <div className="font-display text-xs font-bold leading-none">Mehmet Tevfik Göksu</div>
                 <div className="text-[9px] opacity-90 mt-1 leading-none">Esenler Belediye Başkanı</div>
               </div>
             </div>
