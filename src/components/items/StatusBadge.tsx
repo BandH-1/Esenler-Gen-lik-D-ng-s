@@ -38,10 +38,7 @@ export function StatusBadge({
     kind === "item"
       ? ITEM_STATUS_LABELS[status as ItemStatus]
       : REQUEST_STATUS_LABELS[status as RequestStatus];
-  const tone =
-    kind === "item"
-      ? itemTone[status as ItemStatus]
-      : reqTone[status as RequestStatus];
+  const tone = kind === "item" ? itemTone[status as ItemStatus] : reqTone[status as RequestStatus];
   return (
     <span
       className={cn(

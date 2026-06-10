@@ -161,7 +161,10 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -198,85 +201,200 @@
    Keyframes
    ============================================================ */
 @keyframes fade-up {
-  from { opacity: 0; transform: translate3d(0, 22px, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 @keyframes fade-down {
-  from { opacity: 0; transform: translate3d(0, -18px, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+  from {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @keyframes slide-in-right {
-  from { opacity: 0; transform: translate3d(-16px, 0, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+  from {
+    opacity: 0;
+    transform: translate3d(-16px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 @keyframes blur-in {
-  from { opacity: 0; filter: blur(10px); transform: scale(1.02); }
-  to { opacity: 1; filter: blur(0); transform: scale(1); }
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
 }
 @keyframes float {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  50% { transform: translateY(-14px) translateX(6px); }
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-14px) translateX(6px);
+  }
 }
 @keyframes aurora {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.85; }
-  33% { transform: translate(8%, -6%) scale(1.15); opacity: 1; }
-  66% { transform: translate(-6%, 8%) scale(0.95); opacity: 0.7; }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.85;
+  }
+  33% {
+    transform: translate(8%, -6%) scale(1.15);
+    opacity: 1;
+  }
+  66% {
+    transform: translate(-6%, 8%) scale(0.95);
+    opacity: 0.7;
+  }
 }
 @keyframes shimmer {
-  0% { transform: translateX(-130%) skewX(-18deg); }
-  100% { transform: translateX(230%) skewX(-18deg); }
+  0% {
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(230%) skewX(-18deg);
+  }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 50%, transparent); }
-  50% { box-shadow: 0 0 0 10px color-mix(in oklch, var(--accent) 0%, transparent); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 50%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in oklch, var(--accent) 0%, transparent);
+  }
 }
 @keyframes bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 @keyframes ring-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes count-pop {
-  0% { transform: scale(0.96); }
-  60% { transform: scale(1.04); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.96);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ============================================================
    Animation utilities
    ============================================================ */
-.anim-fade-up { animation: fade-up 0.7s var(--ease-out-expo) both; }
-.anim-fade-down { animation: fade-down 0.6s var(--ease-out-expo) both; }
-.anim-fade-in { animation: fade-in 0.6s var(--ease-smooth) both; }
-.anim-scale-in { animation: scale-in 0.5s var(--ease-spring) both; }
-.anim-blur-in { animation: blur-in 0.8s var(--ease-out-expo) both; }
-.anim-slide-in { animation: slide-in-right 0.5s var(--ease-out-expo) both; }
-.anim-float { animation: float 7s ease-in-out infinite; }
-.anim-float-slow { animation: float 11s ease-in-out infinite; }
-.anim-spin-slow { animation: ring-spin 16s linear infinite; }
+.anim-fade-up {
+  animation: fade-up 0.7s var(--ease-out-expo) both;
+}
+.anim-fade-down {
+  animation: fade-down 0.6s var(--ease-out-expo) both;
+}
+.anim-fade-in {
+  animation: fade-in 0.6s var(--ease-smooth) both;
+}
+.anim-scale-in {
+  animation: scale-in 0.5s var(--ease-spring) both;
+}
+.anim-blur-in {
+  animation: blur-in 0.8s var(--ease-out-expo) both;
+}
+.anim-slide-in {
+  animation: slide-in-right 0.5s var(--ease-out-expo) both;
+}
+.anim-float {
+  animation: float 7s ease-in-out infinite;
+}
+.anim-float-slow {
+  animation: float 11s ease-in-out infinite;
+}
+.anim-spin-slow {
+  animation: ring-spin 16s linear infinite;
+}
 
 /* Staggered children (used on grids/lists) */
-.stagger > * { animation: fade-up 0.6s var(--ease-out-expo) both; }
-.stagger > *:nth-child(1) { animation-delay: 0.04s; }
-.stagger > *:nth-child(2) { animation-delay: 0.09s; }
-.stagger > *:nth-child(3) { animation-delay: 0.14s; }
-.stagger > *:nth-child(4) { animation-delay: 0.19s; }
-.stagger > *:nth-child(5) { animation-delay: 0.24s; }
-.stagger > *:nth-child(6) { animation-delay: 0.29s; }
-.stagger > *:nth-child(7) { animation-delay: 0.34s; }
-.stagger > *:nth-child(8) { animation-delay: 0.39s; }
-.stagger > *:nth-child(9) { animation-delay: 0.44s; }
-.stagger > *:nth-child(10) { animation-delay: 0.49s; }
-.stagger > *:nth-child(n + 11) { animation-delay: 0.54s; }
+.stagger > * {
+  animation: fade-up 0.6s var(--ease-out-expo) both;
+}
+.stagger > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.stagger > *:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.stagger > *:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.stagger > *:nth-child(4) {
+  animation-delay: 0.19s;
+}
+.stagger > *:nth-child(5) {
+  animation-delay: 0.24s;
+}
+.stagger > *:nth-child(6) {
+  animation-delay: 0.29s;
+}
+.stagger > *:nth-child(7) {
+  animation-delay: 0.34s;
+}
+.stagger > *:nth-child(8) {
+  animation-delay: 0.39s;
+}
+.stagger > *:nth-child(9) {
+  animation-delay: 0.44s;
+}
+.stagger > *:nth-child(10) {
+  animation-delay: 0.49s;
+}
+.stagger > *:nth-child(n + 11) {
+  animation-delay: 0.54s;
+}
 
 /* Scroll-reveal (driven by Reveal.tsx via IntersectionObserver) */
 .reveal {
@@ -324,12 +442,7 @@
 
 /* Animated brand gradient text */
 .text-gradient {
-  background: linear-gradient(
-    100deg,
-    var(--brand-from),
-    var(--brand-via),
-    var(--brand-to)
-  );
+  background: linear-gradient(100deg, var(--brand-from), var(--brand-via), var(--brand-to));
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -347,11 +460,21 @@
 }
 
 /* Soft elevation helpers */
-.shadow-soft { box-shadow: var(--shadow-soft); }
-.shadow-card { box-shadow: var(--shadow-card); }
-.shadow-lift { box-shadow: var(--shadow-lift); }
-.glow-accent { box-shadow: var(--glow-accent); }
-.glow-primary { box-shadow: var(--glow-primary); }
+.shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+.shadow-lift {
+  box-shadow: var(--shadow-lift);
+}
+.glow-accent {
+  box-shadow: var(--glow-accent);
+}
+.glow-primary {
+  box-shadow: var(--glow-primary);
+}
 
 /* Page transition wrapper */
 .page-enter {
@@ -359,7 +482,9 @@
 }
 
 /* Number pop on mount */
-.count-pop { animation: count-pop 0.5s var(--ease-spring) both; }
+.count-pop {
+  animation: count-pop 0.5s var(--ease-spring) both;
+}
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {

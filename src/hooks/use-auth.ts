@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import type { Database } from "@/integrations/supabase/types";
 
 type Profile = {
   id: string;
@@ -16,6 +17,10 @@ type Profile = {
   completed_gives: number;
   completed_receives: number;
 };
+
+type AppRole = Database["public"]["Enums"]["app_role"];
+
+export const STAFF_ROLES: AppRole[] = ["admin", "moderator", "safe_point_staff"];
 
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
@@ -46,7 +51,7 @@ export function useProfile() {
       const { data, error } = await supabase
         .from("profiles")
         .select(
-          "id, full_name, email, neighborhood, school_type, school_name, verification_status, eco_point_balance, trust_score, completed_gives, completed_receives"
+          "id, full_name, email, neighborhood, school_type, school_name, verification_status, eco_point_balance, trust_score, completed_gives, completed_receives",
         )
         .eq("id", user.id)
         .maybeSingle();
@@ -56,8 +61,34 @@ export function useProfile() {
   });
 }
 
+export function useHasAnyRole(roles: AppRole[]) {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["roles", user?.id, roles],
+    enabled: !!user && roles.length > 0,
+    staleTime: 60_000,
+    queryFn: async () => {
+      if (!user) return false;
+
+      const checks = await Promise.all(
+        roles.map((role) =>
+          supabase.rpc("has_role", {
+            _user_id: user.id,
+            _role: role,
+          }),
+        ),
+      );
+      const error = checks.find((result) => result.error)?.error;
+      if (error) throw error;
+
+      return checks.some((result) => result.data === true);
+    },
+  });
+}
+
 export async function signOut() {
   await supabase.auth.signOut();
 }
 
-export type { Profile, User };
+export type { AppRole, Profile, User };

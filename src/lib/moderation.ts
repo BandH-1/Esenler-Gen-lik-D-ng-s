@@ -41,12 +41,41 @@ function fold(s: string): string {
 
 // Folded (ASCII) profanity / insult roots. Matched with word boundaries.
 const PROFANITY = [
-  "amk", "aq", "amina", "aminako", "anani", "ananisik",
-  "orospu", "orospucocugu", "pic", "yavsak",
-  "siktir", "sikeyim", "sikerim", "sikik", "sikim", "siktigim", "sikecem",
-  "gotveren", "gotlek", "pust", "pezevenk", "gavat", "kahpe", "surtuk",
-  "salak", "aptal", "gerizekali", "ahmak", "dangalak", "sersem", "gerzek",
-  "manyak", "embesil", "ibne", "godoş",
+  "amk",
+  "aq",
+  "amina",
+  "aminako",
+  "anani",
+  "ananisik",
+  "orospu",
+  "orospucocugu",
+  "pic",
+  "yavsak",
+  "siktir",
+  "sikeyim",
+  "sikerim",
+  "sikik",
+  "sikim",
+  "siktigim",
+  "sikecem",
+  "gotveren",
+  "gotlek",
+  "pust",
+  "pezevenk",
+  "gavat",
+  "kahpe",
+  "surtuk",
+  "salak",
+  "aptal",
+  "gerizekali",
+  "ahmak",
+  "dangalak",
+  "sersem",
+  "gerzek",
+  "manyak",
+  "embesil",
+  "ibne",
+  "godoş",
 ];
 const profanityRe = new RegExp(`\\b(?:${PROFANITY.join("|")})\\b`);
 
@@ -71,11 +100,7 @@ export function moderateComment(raw: string): ModerationResult {
 
   if (profanityRe.test(folded)) violations.push("kufur");
 
-  if (
-    phoneRe.test(text) ||
-    emailRe.test(text) ||
-    contactKeywordsRe.test(folded)
-  ) {
+  if (phoneRe.test(text) || emailRe.test(text) || contactKeywordsRe.test(folded)) {
     violations.push("iletisim");
   }
 
@@ -110,7 +135,7 @@ export function moderateItemSubmission(
   description: string,
   category: string,
   emoji: string,
-  fileName?: string
+  fileName?: string,
 ): ItemModerationResult {
   const violations: string[] = [];
   const foldedTitle = fold(title);
@@ -122,10 +147,14 @@ export function moderateItemSubmission(
     violations.push("Politika İhlali: Küfür veya hakaret içeriyor.");
   }
   if (phoneRe.test(combined) || emailRe.test(combined) || contactKeywordsRe.test(combined)) {
-    violations.push("Politika İhlali: Telefon, e-posta veya adres gibi kişisel iletişim bilgileri içeriyor. Paylaşımlar sadece güvenli noktada yapılmalıdır.");
+    violations.push(
+      "Politika İhlali: Telefon, e-posta veya adres gibi kişisel iletişim bilgileri içeriyor. Paylaşımlar sadece güvenli noktada yapılmalıdır.",
+    );
   }
   if (saleKeywordsRe.test(combined) || currencyRe.test(combined)) {
-    violations.push("Politika İhlali: Satış, ücret, takas veya ödeme talebi içeriyor. Bu platform tamamen ücretsizdir.");
+    violations.push(
+      "Politika İhlali: Satış, ücret, takas veya ödeme talebi içeriyor. Bu platform tamamen ücretsizdir.",
+    );
   }
   if (linkRe.test(combined)) {
     violations.push("Politika İhlali: Harici bağlantı veya spam içeriyor.");
@@ -133,10 +162,47 @@ export function moderateItemSubmission(
 
   // 2. Kategori / Görsel Uyuşmazlığı Kontrolü
   const categoryKeywords: Record<string, string[]> = {
-    kitap: ["telefon", "kulaklik", "tablet", "bilgisayar", "mont", "pantolon", "ayakkabi", "esofman", "yatak", "koltuk", "lamba", "topu", "matı"],
-    kiyafet: ["kitap", "defter", "kalem", "tablet", "bilgisayar", "telefon", "sarj", "yatak", "koltuk", "lamba", "topu", "matı"],
+    kitap: [
+      "telefon",
+      "kulaklik",
+      "tablet",
+      "bilgisayar",
+      "mont",
+      "pantolon",
+      "ayakkabi",
+      "esofman",
+      "yatak",
+      "koltuk",
+      "lamba",
+      "topu",
+      "matı",
+    ],
+    kiyafet: [
+      "kitap",
+      "defter",
+      "kalem",
+      "tablet",
+      "bilgisayar",
+      "telefon",
+      "sarj",
+      "yatak",
+      "koltuk",
+      "lamba",
+      "topu",
+      "matı",
+    ],
     okul: ["mont", "pantolon", "ayakkabi", "yatak", "koltuk", "lamba", "topu", "matı"],
-    elektronik: ["kitap", "defter", "roman", "mont", "pantolon", "ayakkabi", "yatak", "koltuk", "lamba"],
+    elektronik: [
+      "kitap",
+      "defter",
+      "roman",
+      "mont",
+      "pantolon",
+      "ayakkabi",
+      "yatak",
+      "koltuk",
+      "lamba",
+    ],
     spor: ["kitap", "defter", "roman", "mont", "pantolon", "yatak", "koltuk", "lamba"],
     yurt: ["roman", "kitap", "defter", "ayakkabi", "topu", "matı"],
   };
@@ -147,20 +213,38 @@ export function moderateItemSubmission(
   let fileMismatch = false;
   if (fileName) {
     const foldedFile = fold(fileName);
-    if (category === "elektronik" && (foldedFile.includes("kitap") || foldedFile.includes("roman") || foldedFile.includes("defter"))) {
+    if (
+      category === "elektronik" &&
+      (foldedFile.includes("kitap") ||
+        foldedFile.includes("roman") ||
+        foldedFile.includes("defter"))
+    ) {
       fileMismatch = true;
     }
-    if (category === "kitap" && (foldedFile.includes("telefon") || foldedFile.includes("kulaklik") || foldedFile.includes("tablet") || foldedFile.includes("bilgisayar") || foldedFile.includes("makine"))) {
+    if (
+      category === "kitap" &&
+      (foldedFile.includes("telefon") ||
+        foldedFile.includes("kulaklik") ||
+        foldedFile.includes("tablet") ||
+        foldedFile.includes("bilgisayar") ||
+        foldedFile.includes("makine"))
+    ) {
       fileMismatch = true;
     }
   }
 
   if (detectedMismatchKeywords.length > 0 || fileMismatch) {
-    violations.push(`Görsel / Kategori Uyuşmazlığı: İlan içeriği seçilen kategori (${category.toUpperCase()}) veya temsili görsel/fotoğraf ile uyuşmuyor.`);
+    violations.push(
+      `Görsel / Kategori Uyuşmazlığı: İlan içeriği seçilen kategori (${category.toUpperCase()}) veya temsili görsel/fotoğraf ile uyuşmuyor.`,
+    );
   }
 
   if (violations.length === 0) {
-    return { ok: true, violations: [], message: "AI Taraması Başarılı: İlan kurallara ve politikalarımıza uygun." };
+    return {
+      ok: true,
+      violations: [],
+      message: "AI Taraması Başarılı: İlan kurallara ve politikalarımıza uygun.",
+    };
   }
 
   return {
@@ -171,4 +255,3 @@ export function moderateItemSubmission(
     policyViolated: violations.some((v) => v.startsWith("Politika")),
   };
 }
-

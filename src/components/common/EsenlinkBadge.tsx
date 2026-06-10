@@ -1,8 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  ESENLINK_SYNC_LABELS,
-  type EsenlinkSync,
-} from "@/lib/mock/types";
+import { ESENLINK_SYNC_LABELS, type EsenlinkSync } from "@/lib/mock/types";
 import { CheckCircle2, Clock, AlertTriangle, FlaskConical } from "lucide-react";
 
 const TONE: Record<EsenlinkSync, string> = {
@@ -19,13 +16,7 @@ const ICONS = {
   demo: FlaskConical,
 } as const;
 
-export function EsenlinkBadge({
-  sync,
-  className,
-}: {
-  sync: EsenlinkSync;
-  className?: string;
-}) {
+export function EsenlinkBadge({ sync, className }: { sync: EsenlinkSync; className?: string }) {
   const Icon = ICONS[sync];
   return (
     <span

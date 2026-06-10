@@ -95,11 +95,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "eştakas — Esenler Belediyesi" },
       {
         name: "twitter:description",
-        content:
-          "Esenler gençleri için ücretsiz, güvenli ve sürdürülebilir takas platformu.",
+        content: "Esenler gençleri için ücretsiz, güvenli ve sürdürülebilir takas platformu.",
       },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/80fcd630-3622-4fcb-a547-22a73534eeab/id-preview-6b895fbf--f5f87d1f-224f-48e9-9c7a-355718bb4baa.lovable.app-1780763203132.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/80fcd630-3622-4fcb-a547-22a73534eeab/id-preview-6b895fbf--f5f87d1f-224f-48e9-9c7a-355718bb4baa.lovable.app-1780763203132.png" },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/80fcd630-3622-4fcb-a547-22a73534eeab/id-preview-6b895fbf--f5f87d1f-224f-48e9-9c7a-355718bb4baa.lovable.app-1780763203132.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/80fcd630-3622-4fcb-a547-22a73534eeab/id-preview-6b895fbf--f5f87d1f-224f-48e9-9c7a-355718bb4baa.lovable.app-1780763203132.png",
+      },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [

@@ -1,10 +1,7 @@
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
-export type EcoTx =
-  Database["public"]["Tables"]["eco_point_transactions"]["Row"];
+export type EcoTx = Database["public"]["Tables"]["eco_point_transactions"]["Row"];
 export type EcoTxStatus = EcoTx["status"];
 export type EcoTxType = EcoTx["transaction_type"];
 
@@ -32,11 +29,13 @@ export const TX_SYNC_FROM_STATUS = (s: EcoTxStatus) =>
         ? "failed"
         : "demo";
 
-export async function fetchTransactions(opts: {
-  userId?: string;
-  from?: string;
-  to?: string;
-} = {}): Promise<EcoTx[]> {
+export async function fetchTransactions(
+  opts: {
+    userId?: string;
+    from?: string;
+    to?: string;
+  } = {},
+): Promise<EcoTx[]> {
   let q = supabase
     .from("eco_point_transactions")
     .select("*")
@@ -60,8 +59,18 @@ export type MonthlyRow = {
 };
 
 const TR_MONTHS = [
-  "Oca", "Şub", "Mar", "Nis", "May", "Haz",
-  "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara",
+  "Oca",
+  "Şub",
+  "Mar",
+  "Nis",
+  "May",
+  "Haz",
+  "Tem",
+  "Ağu",
+  "Eyl",
+  "Eki",
+  "Kas",
+  "Ara",
 ];
 
 export function monthlySummary(txs: EcoTx[]): MonthlyRow[] {
@@ -69,23 +78,19 @@ export function monthlySummary(txs: EcoTx[]): MonthlyRow[] {
   for (const t of txs) {
     const d = new Date(t.created_at);
     const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-    const row =
-      map.get(key) ??
-      {
-        month: key,
-        label: `${TR_MONTHS[d.getMonth()]} ${d.getFullYear()}`,
-        earned: 0,
-        pending: 0,
-        penalty: 0,
-        net: 0,
-        count: 0,
-      };
+    const row = map.get(key) ?? {
+      month: key,
+      label: `${TR_MONTHS[d.getMonth()]} ${d.getFullYear()}`,
+      earned: 0,
+      pending: 0,
+      penalty: 0,
+      net: 0,
+      count: 0,
+    };
     row.count++;
     if (t.status === "pending") row.pending += t.points;
-    else if (t.transaction_type === "penalty")
-      row.penalty += Math.abs(t.points);
-    else if (t.status === "completed" || t.status === "synced_to_esenlink")
-      row.earned += t.points;
+    else if (t.transaction_type === "penalty") row.penalty += Math.abs(t.points);
+    else if (t.status === "completed" || t.status === "synced_to_esenlink") row.earned += t.points;
     row.net = row.earned - row.penalty;
     map.set(key, row);
   }
@@ -97,19 +102,14 @@ function csvEscape(v: unknown): string {
   return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-export function downloadCsv(
-  filename: string,
-  rows: Record<string, string | number>[],
-) {
+export function downloadCsv(filename: string, rows: Record<string, string | number>[]) {
   if (!rows.length) {
     const blob = new Blob(["\uFEFF"], { type: "text/csv;charset=utf-8" });
     triggerDownload(blob, filename);
     return;
   }
   const headers = Object.keys(rows[0]);
-  const body = rows
-    .map((r) => headers.map((h) => csvEscape(r[h])).join(","))
-    .join("\n");
+  const body = rows.map((r) => headers.map((h) => csvEscape(r[h])).join(",")).join("\n");
   const csv = "\uFEFF" + headers.join(",") + "\n" + body;
   triggerDownload(new Blob([csv], { type: "text/csv;charset=utf-8" }), filename);
 }
@@ -128,29 +128,37 @@ function triggerDownload(blob: Blob, filename: string) {
 // Light ASCII fold so jsPDF's built-in font renders Turkish text legibly
 function fold(s: string): string {
   return s
-    .replace(/ı/g, "i").replace(/İ/g, "I")
-    .replace(/ş/g, "s").replace(/Ş/g, "S")
-    .replace(/ğ/g, "g").replace(/Ğ/g, "G")
-    .replace(/ü/g, "u").replace(/Ü/g, "U")
-    .replace(/ö/g, "o").replace(/Ö/g, "O")
-    .replace(/ç/g, "c").replace(/Ç/g, "C");
+    .replace(/ı/g, "i")
+    .replace(/İ/g, "I")
+    .replace(/ş/g, "s")
+    .replace(/Ş/g, "S")
+    .replace(/ğ/g, "g")
+    .replace(/Ğ/g, "G")
+    .replace(/ü/g, "u")
+    .replace(/Ü/g, "U")
+    .replace(/ö/g, "o")
+    .replace(/Ö/g, "O")
+    .replace(/ç/g, "c")
+    .replace(/Ç/g, "C");
 }
 
-export function downloadTxPdf(
+export async function downloadTxPdf(
   filename: string,
   title: string,
   rows: Record<string, string | number>[],
   summaryRows?: Record<string, string | number>[],
 ) {
+  const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable"),
+  ]);
   const doc = new jsPDF();
   doc.setFontSize(14);
   doc.text(fold(title), 14, 16);
   doc.setFontSize(9);
   doc.setTextColor(100);
   doc.text(
-    fold(
-      `Olusturma: ${new Date().toLocaleString("tr-TR")} — Esenler Belediyesi / estakas`,
-    ),
+    fold(`Olusturma: ${new Date().toLocaleString("tr-TR")} — Esenler Belediyesi / estakas`),
     14,
     22,
   );

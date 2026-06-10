@@ -8,12 +8,7 @@ import { QrPlaceholder } from "@/components/handover/QrPlaceholder";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Reveal } from "@/components/common/Reveal";
 import { Button } from "@/components/ui/button";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/taleplerim")({
   head: () => ({
@@ -38,9 +33,7 @@ function RequestsPage() {
   // Select the stable array and filter in render (a fresh array from the
   // selector makes useSyncExternalStore loop infinitely).
   const allRequests = useStore((s) => s.requests);
-  const requests = allRequests.filter(
-    (r) => r.requesterId === currentUserId,
-  );
+  const requests = allRequests.filter((r) => r.requesterId === currentUserId);
 
   return (
     <div className="flex flex-col gap-4 py-4">
@@ -96,12 +89,8 @@ function RequestsPage() {
 
 function RequestCard({ request }: { request: ExchangeRequest }) {
   const item = useStore((s) => s.items.find((i) => i.id === request.itemId));
-  const owner = useStore((s) =>
-    s.users.find((u) => u.id === request.ownerId),
-  );
-  const handover = useStore((s) =>
-    s.handoverPoints.find((h) => h.id === request.handoverPointId),
-  );
+  const owner = useStore((s) => s.users.find((u) => u.id === request.ownerId));
+  const handover = useStore((s) => s.handoverPoints.find((h) => h.id === request.handoverPointId));
   const approve = useStore((s) => s.markQrReady);
   const complete = useStore((s) => s.completeRequest);
   const cancel = useStore((s) => s.cancelRequest);
@@ -150,8 +139,7 @@ function RequestCard({ request }: { request: ExchangeRequest }) {
             </Button>
           </div>
         )}
-        {(request.status === "talep-edildi" ||
-          request.status === "onaylandi") && (
+        {(request.status === "talep-edildi" || request.status === "onaylandi") && (
           <Button
             size="sm"
             variant="ghost"

@@ -21,8 +21,7 @@ export const Route = createFileRoute("/esya-ekle")({
       { title: "Eşya Ekle — eştakas" },
       {
         name: "description",
-        content:
-          "Kullanmadığın eşyayı Esenler gençlerine ücretsiz bağışla, Eko-Puan kazan.",
+        content: "Kullanmadığın eşyayı Esenler gençlerine ücretsiz bağışla, Eko-Puan kazan.",
       },
     ],
   }),
@@ -42,9 +41,7 @@ function AddItemPage() {
   const navigate = useNavigate();
   const addItem = useStore((s) => s.addItem);
   const handoverPoints = useStore((s) => s.handoverPoints);
-  const neighborhoods = Array.from(
-    new Set(handoverPoints.map((h) => h.neighborhood)),
-  );
+  const neighborhoods = Array.from(new Set(handoverPoints.map((h) => h.neighborhood)));
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -90,7 +87,7 @@ function AddItemPage() {
         description,
         category,
         selectedEmoji,
-        photo ? photo.name : undefined
+        photo ? photo.name : undefined,
       );
 
       setIsAnalyzing(false);
@@ -100,7 +97,7 @@ function AddItemPage() {
         const attributes: Record<string, string> = {};
         if (category === "kitap" && attrSubject) attributes["Ders"] = attrSubject;
         if (category === "kiyafet" && attrSize) attributes["Beden"] = attrSize;
-        
+
         const imageValue = photoUrl || selectedEmoji;
 
         addItem({
@@ -143,13 +140,17 @@ function AddItemPage() {
                     "radial-gradient(circle at 50% 40%, color-mix(in oklch, var(--accent) 15%, transparent), transparent 60%)",
                 }}
               />
-              
+
               {photoUrl ? (
-                <img src={photoUrl} alt="Ürün Fotoğrafı" className="h-full w-full object-cover relative z-10" />
+                <img
+                  src={photoUrl}
+                  alt="Ürün Fotoğrafı"
+                  className="h-full w-full object-cover relative z-10"
+                />
               ) : (
                 <span className="relative text-6xl drop-shadow-md z-10">{selectedEmoji}</span>
               )}
-              
+
               {/* AI Tarama Çizgisi */}
               {isAnalyzing && (
                 <div className="absolute inset-x-0 h-1 bg-accent/80 shadow-[0_0_12px_var(--accent)] animate-[bob_1.5s_ease-in-out_infinite] z-20" />
@@ -173,7 +174,7 @@ function AddItemPage() {
                 </button>
               )}
             </div>
-            
+
             {/* Alternatif Seçici & Fotoğraf Yükleyici */}
             <div className="sm:col-span-2 flex flex-col justify-between gap-3">
               <div>
@@ -217,7 +218,10 @@ function AddItemPage() {
               </div>
               <div className="text-[11px] text-muted-foreground flex items-start gap-1.5 rounded-xl bg-secondary/50 p-2.5 border">
                 <Info className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-                <span>Fotoğraf yüklerseniz temsili görsel devre dışı kalır. Yüz veya adres içermeyen görseller tercih edin.</span>
+                <span>
+                  Fotoğraf yüklerseniz temsili görsel devre dışı kalır. Yüz veya adres içermeyen
+                  görseller tercih edin.
+                </span>
               </div>
             </div>
           </div>
@@ -340,13 +344,15 @@ function AddItemPage() {
           </div>
           <div className="flex items-start gap-2 rounded-xl bg-warning/15 p-3 text-xs text-warning-foreground ring-1 ring-warning/30">
             <Info className="mt-0.5 h-4 w-4 shrink-0" />
-            Ev adresi paylaşma. Teslim sadece belediyenin güvenli noktalarında
-            yapılır.
+            Ev adresi paylaşma. Teslim sadece belediyenin güvenli noktalarında yapılır.
           </div>
         </Section>
 
         {/* Pre-listing Eko-Puan preview */}
-        <section className="anim-fade-up relative overflow-hidden rounded-2xl border bg-gradient-to-br from-accent/12 to-primary/12 p-4 ring-1 ring-accent/20" style={{ animationDelay: "190ms" }}>
+        <section
+          className="anim-fade-up relative overflow-hidden rounded-2xl border bg-gradient-to-br from-accent/12 to-primary/12 p-4 ring-1 ring-accent/20"
+          style={{ animationDelay: "190ms" }}
+        >
           <div
             className="anim-float pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-40 blur-2xl"
             style={{
@@ -365,17 +371,14 @@ function AddItemPage() {
                 <div className="font-display text-3xl font-bold leading-tight tabular-nums">
                   +
                   <CountUp key={reward} value={reward} duration={700} />
-                  <span className="ml-1 text-xs font-medium text-muted-foreground">
-                    Eko-Puan
-                  </span>
+                  <span className="ml-1 text-xs font-medium text-muted-foreground">Eko-Puan</span>
                 </div>
               </div>
             </div>
             <Coins className="h-6 w-6 text-accent" />
           </div>
           <p className="relative mt-2 text-[11px] text-muted-foreground">
-            Puan, ürün güvenli teslim noktasında teslim edildikten sonra hesabına
-            yüklenir.
+            Puan, ürün güvenli teslim noktasında teslim edildikten sonra hesabına yüklenir.
           </p>
         </section>
 
@@ -393,7 +396,8 @@ function AddItemPage() {
               {aiReport.message}
             </div>
             <div className="text-[10px] text-destructive/80 font-medium bg-destructive/10 p-2.5 rounded-xl border border-destructive/20 mt-1">
-              ⚠️ Lütfen ilan başlığını, açıklamasını, kategorisini veya yüklenen resmi politikalarımıza uygun şekilde güncelleyin.
+              ⚠️ Lütfen ilan başlığını, açıklamasını, kategorisini veya yüklenen resmi
+              politikalarımıza uygun şekilde güncelleyin.
             </div>
           </div>
         )}
@@ -407,8 +411,8 @@ function AddItemPage() {
             disabled={isAnalyzing}
           />
           <span>
-            Bu ürünü <b>tamamen ücretsiz</b> devredeceğimi onaylıyorum. Satış,
-            ödeme, kargo veya adres paylaşımı yoktur.
+            Bu ürünü <b>tamamen ücretsiz</b> devredeceğimi onaylıyorum. Satış, ödeme, kargo veya
+            adres paylaşımı yoktur.
           </span>
         </label>
 
@@ -457,13 +461,7 @@ function Section({
   );
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">

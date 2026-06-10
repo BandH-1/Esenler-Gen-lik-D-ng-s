@@ -2,12 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useStore } from "@/lib/mock/store";
-import {
-  CATEGORY_LABELS,
-  CONDITION_LABELS,
-  type Category,
-  type Condition,
-} from "@/lib/mock/types";
+import { CATEGORY_LABELS, CONDITION_LABELS, type Category, type Condition } from "@/lib/mock/types";
 import { ItemCard } from "@/components/items/ItemCard";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Reveal } from "@/components/common/Reveal";
@@ -54,25 +49,15 @@ function BrowsePage() {
   );
 
   const filtered = useMemo(() => {
-    let list = items.filter(
-      (i) => i.status === "aktif" || i.status === "rezerve",
-    );
+    let list = items.filter((i) => i.status === "aktif" || i.status === "rezerve");
     if (search.category) list = list.filter((i) => i.category === search.category);
     if (search.condition) list = list.filter((i) => i.condition === search.condition);
-    if (search.neighborhood)
-      list = list.filter((i) => i.neighborhood === search.neighborhood);
-    if (search.handover)
-      list = list.filter((i) => i.handoverPointId === search.handover);
-    if (q.trim())
-      list = list.filter((i) =>
-        i.title.toLowerCase().includes(q.toLowerCase()),
-      );
+    if (search.neighborhood) list = list.filter((i) => i.neighborhood === search.neighborhood);
+    if (search.handover) list = list.filter((i) => i.handoverPointId === search.handover);
+    if (q.trim()) list = list.filter((i) => i.title.toLowerCase().includes(q.toLowerCase()));
     if (search.sort === "puan")
       list = [...list].sort((a, b) => b.ecoPointReward - a.ecoPointReward);
-    else
-      list = [...list].sort(
-        (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
-      );
+    else list = [...list].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
     return list;
   }, [items, search, q]);
 
@@ -92,8 +77,7 @@ function BrowsePage() {
         <h1 className="font-display text-2xl font-bold tracking-tight">İlanlar</h1>
         <p className="text-sm text-muted-foreground">
           Esenler gençlerinin paylaştığı{" "}
-          <span className="font-semibold text-accent">{filtered.length}</span>{" "}
-          ücretsiz eşya.
+          <span className="font-semibold text-accent">{filtered.length}</span> ücretsiz eşya.
         </p>
       </div>
 
@@ -104,6 +88,7 @@ function BrowsePage() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
+            aria-label="Eşya ara"
             placeholder="Eşya ara..."
             className="h-11 w-full rounded-xl border bg-background/60 pl-10 pr-3 text-sm outline-none transition-all duration-300 focus:border-primary/40 focus:ring-2 focus:ring-ring/40"
           />
@@ -111,6 +96,7 @@ function BrowsePage() {
         <div className="mt-2.5 flex items-center gap-2 overflow-x-auto pb-0.5">
           <SlidersHorizontal className="h-4 w-4 shrink-0 text-muted-foreground" />
           <Select
+            ariaLabel="Kategori filtresi"
             value={search.category ?? ""}
             onChange={(v) => update({ category: (v as Category) || undefined })}
             options={[
@@ -122,6 +108,7 @@ function BrowsePage() {
             ]}
           />
           <Select
+            ariaLabel="Durum filtresi"
             value={search.condition ?? ""}
             onChange={(v) => update({ condition: (v as Condition) || undefined })}
             options={[
@@ -133,6 +120,7 @@ function BrowsePage() {
             ]}
           />
           <Select
+            ariaLabel="Mahalle filtresi"
             value={search.neighborhood ?? ""}
             onChange={(v) => update({ neighborhood: v || undefined })}
             options={[
@@ -141,6 +129,7 @@ function BrowsePage() {
             ]}
           />
           <Select
+            ariaLabel="Teslim noktası filtresi"
             value={search.handover ?? ""}
             onChange={(v) => update({ handover: v || undefined })}
             options={[
@@ -149,6 +138,7 @@ function BrowsePage() {
             ]}
           />
           <Select
+            ariaLabel="Sıralama"
             value={search.sort ?? "yeni"}
             onChange={(v) => update({ sort: v as SearchParams["sort"] })}
             options={[
@@ -196,10 +186,12 @@ function BrowsePage() {
 }
 
 function Select({
+  ariaLabel,
   value,
   onChange,
   options,
 }: {
+  ariaLabel: string;
   value: string;
   onChange: (v: string) => void;
   options: { value: string; label: string }[];
@@ -207,6 +199,7 @@ function Select({
   return (
     <select
       value={value}
+      aria-label={ariaLabel}
       onChange={(e) => onChange(e.target.value)}
       className="h-9 shrink-0 rounded-full border bg-background/60 px-3 text-xs font-medium outline-none transition-all duration-300 hover:border-primary/30 focus:border-primary/40 focus:ring-2 focus:ring-ring/40"
     >

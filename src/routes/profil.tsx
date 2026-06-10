@@ -14,6 +14,7 @@ import { useCurrentUser, useStore, STRIKE_LIMIT } from "@/lib/mock/store";
 import { SCHOOL_LABELS } from "@/lib/mock/types";
 import { CountUp } from "@/components/common/CountUp";
 import { Reveal } from "@/components/common/Reveal";
+import { STAFF_ROLES, useAuth, useHasAnyRole } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/profil")({
   head: () => ({
@@ -27,12 +28,12 @@ export const Route = createFileRoute("/profil")({
 
 function ProfilePage() {
   const user = useCurrentUser();
+  const { user: authUser } = useAuth();
+  const { data: hasStaffRole = false } = useHasAnyRole(STAFF_ROLES);
   // NOTE: select the stable array and filter in render. Returning a fresh
   // array from the selector makes useSyncExternalStore loop infinitely.
   const allItems = useStore((s) => s.items);
-  const items = allItems.filter(
-    (i) => i.ownerId === user.id && i.status === "tamamlandi",
-  );
+  const items = allItems.filter((i) => i.ownerId === user.id && i.status === "tamamlandi");
 
   const eligibility = [
     { label: "Genç (15-29)", ok: user.age >= 15 && user.age <= 29 },
@@ -44,6 +45,8 @@ function ProfilePage() {
       ok: user.verificationStatus === "dogrulanmis",
     },
   ];
+  const canOpenAdmin =
+    import.meta.env.DEV || user.userType === "yonetici" || (!!authUser && hasStaffRole);
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-5 py-4">
@@ -53,8 +56,7 @@ function ProfilePage() {
           <div
             className="pointer-events-none absolute inset-0 opacity-20"
             style={{
-              backgroundImage:
-                "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)",
+              backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)",
               backgroundSize: "18px 18px",
             }}
           />
@@ -63,7 +65,9 @@ function ProfilePage() {
           <div
             className="flex h-24 w-24 items-center justify-center rounded-full text-3xl font-bold text-white shadow-lift ring-4 ring-card leading-none"
             style={{ backgroundColor: user.avatarColor }}
-          >{user.name[0]}</div>
+          >
+            {user.name[0]}
+          </div>
           <div className="text-center">
             <div className="flex items-center justify-center gap-1.5 font-display text-lg font-bold">
               {user.name}
@@ -91,9 +95,8 @@ function ProfilePage() {
           <div className="text-sm">
             <p className="font-semibold text-destructive">Hesabın askıya alındı</p>
             <p className="mt-0.5 text-muted-foreground">
-              {user.banReason ?? "Topluluk kurallarını ihlal ettin."} Yorum
-              yapamaz ve eşya talep edemezsin. İtiraz için belediye moderasyon
-              ekibiyle iletişime geç.
+              {user.banReason ?? "Topluluk kurallarını ihlal ettin."} Yorum yapamaz ve eşya talep
+              edemezsin. İtiraz için belediye moderasyon ekibiyle iletişime geç.
             </p>
           </div>
         </div>
@@ -107,8 +110,8 @@ function ProfilePage() {
               Topluluk uyarısı: {user.strikes}/{STRIKE_LIMIT}
             </p>
             <p className="mt-0.5 text-muted-foreground">
-              İçeriklerin topluluk kurallarına aykırı bulundu. {STRIKE_LIMIT}.
-              uyarıda hesabın otomatik olarak askıya alınır.
+              İçeriklerin topluluk kurallarına aykırı bulundu. {STRIKE_LIMIT}. uyarıda hesabın
+              otomatik olarak askıya alınır.
             </p>
           </div>
         </div>
@@ -129,9 +132,7 @@ function ProfilePage() {
                 ) : (
                   <ShieldQuestion className="h-4 w-4 text-warning-foreground" />
                 )}
-                <span className={e.ok ? "" : "text-muted-foreground"}>
-                  {e.label}
-                </span>
+                <span className={e.ok ? "" : "text-muted-foreground"}>{e.label}</span>
               </li>
             ))}
           </ul>
@@ -158,21 +159,23 @@ function ProfilePage() {
         </section>
       </Reveal>
 
-      <Reveal delay={120}>
-        <Link
-          to="/yonetim"
-          className="group flex items-center justify-between rounded-2xl border bg-card/80 p-4 text-sm font-semibold shadow-soft backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card"
-        >
-          <span className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            Belediye Yönetim Paneli
-          </span>
-          <span className="flex items-center gap-1 text-primary">
-            Aç
-            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-          </span>
-        </Link>
-      </Reveal>
+      {canOpenAdmin && (
+        <Reveal delay={120}>
+          <Link
+            to="/yonetim"
+            className="group flex items-center justify-between rounded-2xl border bg-card/80 p-4 text-sm font-semibold shadow-soft backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card"
+          >
+            <span className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              Belediye Yönetim Paneli
+            </span>
+            <span className="flex items-center gap-1 text-primary">
+              Aç
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </Link>
+        </Reveal>
+      )}
     </div>
   );
 }

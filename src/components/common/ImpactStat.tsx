@@ -24,8 +24,7 @@ export function ImpactStat({
   }[accent];
 
   const isNumericish =
-    typeof value === "number" ||
-    (typeof value === "string" && /^[\d.,]+$/.test(value));
+    typeof value === "number" || (typeof value === "string" && /^[\d.,]+$/.test(value));
 
   return (
     <div className="hover-lift group flex items-center gap-3 rounded-2xl border bg-card/80 p-3 shadow-soft backdrop-blur-sm">

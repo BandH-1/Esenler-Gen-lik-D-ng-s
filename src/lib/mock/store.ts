@@ -98,13 +98,11 @@ export const useStore = create<StoreState>((set, get) => ({
     if (user.banned)
       return {
         status: "banned",
-        message:
-          "Hesabın topluluk kurallarını ihlal nedeniyle askıya alındı. Yorum yapamazsın.",
+        message: "Hesabın topluluk kurallarını ihlal nedeniyle askıya alındı. Yorum yapamazsın.",
       };
 
     const text = rawText.trim();
-    if (!text)
-      return { status: "error", message: "Boş yorum gönderilemez." };
+    if (!text) return { status: "error", message: "Boş yorum gönderilemez." };
 
     const now = new Date().toISOString();
     const mod = moderateComment(text);
@@ -179,9 +177,7 @@ export const useStore = create<StoreState>((set, get) => ({
 
   banUser: (userId, reason) =>
     set((s) => ({
-      users: s.users.map((u) =>
-        u.id === userId ? { ...u, banned: true, banReason: reason } : u,
-      ),
+      users: s.users.map((u) => (u.id === userId ? { ...u, banned: true, banReason: reason } : u)),
       moderationEvents: [
         {
           id: uid("mod"),
@@ -198,9 +194,7 @@ export const useStore = create<StoreState>((set, get) => ({
   unbanUser: (userId) =>
     set((s) => ({
       users: s.users.map((u) =>
-        u.id === userId
-          ? { ...u, banned: false, banReason: undefined, strikes: 0 }
-          : u,
+        u.id === userId ? { ...u, banned: false, banReason: undefined, strikes: 0 } : u,
       ),
       moderationEvents: [
         {
@@ -216,8 +210,7 @@ export const useStore = create<StoreState>((set, get) => ({
 
   addItem: (input) => {
     const id = uid("i");
-    const reward =
-      input.ecoPointReward ?? calculateEcoPoints(input.category, input.condition);
+    const reward = input.ecoPointReward ?? calculateEcoPoints(input.category, input.condition);
     const item: Item = {
       ...input,
       id,
@@ -246,18 +239,14 @@ export const useStore = create<StoreState>((set, get) => ({
     };
     set((s) => ({
       requests: [req, ...s.requests],
-      items: s.items.map((i) =>
-        i.id === itemId ? { ...i, status: "rezerve" } : i,
-      ),
+      items: s.items.map((i) => (i.id === itemId ? { ...i, status: "rezerve" } : i)),
     }));
     return id;
   },
 
   approveRequest: (requestId) =>
     set((s) => ({
-      requests: s.requests.map((r) =>
-        r.id === requestId ? { ...r, status: "onaylandi" } : r,
-      ),
+      requests: s.requests.map((r) => (r.id === requestId ? { ...r, status: "onaylandi" } : r)),
     })),
 
   markQrReady: (requestId) => {
@@ -265,12 +254,8 @@ export const useStore = create<StoreState>((set, get) => ({
     const item = req && get().items.find((i) => i.id === req.itemId);
     if (!req || !item) return;
     set((s) => ({
-      requests: s.requests.map((r) =>
-        r.id === requestId ? { ...r, status: "qr-hazir" } : r,
-      ),
-      items: s.items.map((i) =>
-        i.id === req.itemId ? { ...i, status: "teslim-planlandi" } : i,
-      ),
+      requests: s.requests.map((r) => (r.id === requestId ? { ...r, status: "qr-hazir" } : r)),
+      items: s.items.map((i) => (i.id === req.itemId ? { ...i, status: "teslim-planlandi" } : i)),
       // Reserve pending points for the giver
       pointTransactions: [
         {
@@ -295,10 +280,7 @@ export const useStore = create<StoreState>((set, get) => ({
     set((s) => {
       let pts = s.pointTransactions;
       const existing = pts.find(
-        (t) =>
-          t.itemId === req.itemId &&
-          t.userId === req.ownerId &&
-          t.status === "bekliyor",
+        (t) => t.itemId === req.itemId && t.userId === req.ownerId && t.status === "bekliyor",
       );
       if (existing) {
         pts = pts.map((t) =>
@@ -332,9 +314,7 @@ export const useStore = create<StoreState>((set, get) => ({
             ? { ...r, status: "tamamlandi", completedAt: new Date().toISOString() }
             : r,
         ),
-        items: s.items.map((i) =>
-          i.id === req.itemId ? { ...i, status: "tamamlandi" } : i,
-        ),
+        items: s.items.map((i) => (i.id === req.itemId ? { ...i, status: "tamamlandi" } : i)),
         users: s.users.map((u) =>
           u.id === req.ownerId && item
             ? { ...u, ecoPointBalance: u.ecoPointBalance + item.ecoPointReward }
@@ -348,23 +328,15 @@ export const useStore = create<StoreState>((set, get) => ({
   cancelRequest: (requestId) => {
     const req = get().requests.find((r) => r.id === requestId);
     set((s) => ({
-      requests: s.requests.map((r) =>
-        r.id === requestId ? { ...r, status: "iptal" } : r,
-      ),
+      requests: s.requests.map((r) => (r.id === requestId ? { ...r, status: "iptal" } : r)),
       items: req
-        ? s.items.map((i) =>
-            i.id === req.itemId ? { ...i, status: "aktif" } : i,
-          )
+        ? s.items.map((i) => (i.id === req.itemId ? { ...i, status: "aktif" } : i))
         : s.items,
       // Cancelled handovers do not earn points: remove any pending tx
       pointTransactions: req
         ? s.pointTransactions.filter(
             (t) =>
-              !(
-                t.itemId === req.itemId &&
-                t.userId === req.ownerId &&
-                t.status === "bekliyor"
-              ),
+              !(t.itemId === req.itemId && t.userId === req.ownerId && t.status === "bekliyor"),
           )
         : s.pointTransactions,
     }));
@@ -372,30 +344,22 @@ export const useStore = create<StoreState>((set, get) => ({
 
   removeItem: (itemId) =>
     set((s) => ({
-      items: s.items.map((i) =>
-        i.id === itemId ? { ...i, status: "kaldirildi" } : i,
-      ),
+      items: s.items.map((i) => (i.id === itemId ? { ...i, status: "kaldirildi" } : i)),
     })),
 
   updateItemImage: (itemId, emoji) =>
     set((s) => ({
-      items: s.items.map((i) =>
-        i.id === itemId ? { ...i, images: [emoji] } : i,
-      ),
+      items: s.items.map((i) => (i.id === itemId ? { ...i, images: [emoji] } : i)),
     })),
 
   approveItem: (itemId) =>
     set((s) => ({
-      items: s.items.map((i) =>
-        i.id === itemId ? { ...i, status: "aktif" } : i,
-      ),
+      items: s.items.map((i) => (i.id === itemId ? { ...i, status: "aktif" } : i)),
     })),
 
   rejectItem: (itemId) =>
     set((s) => ({
-      items: s.items.map((i) =>
-        i.id === itemId ? { ...i, status: "reddedildi" } : i,
-      ),
+      items: s.items.map((i) => (i.id === itemId ? { ...i, status: "reddedildi" } : i)),
     })),
 
   reportItem: (itemId, reason) =>
@@ -416,9 +380,7 @@ export const useStore = create<StoreState>((set, get) => ({
   retrySyncTx: (txId) =>
     set((s) => ({
       pointTransactions: s.pointTransactions.map((t) =>
-        t.id === txId
-          ? { ...t, esenlinkSync: "synced", status: "tamamlandi" }
-          : t,
+        t.id === txId ? { ...t, esenlinkSync: "synced", status: "tamamlandi" } : t,
       ),
     })),
 
@@ -450,5 +412,4 @@ export const useStore = create<StoreState>((set, get) => ({
     }),
 }));
 
-export const useCurrentUser = () =>
-  useStore((s) => s.users.find((u) => u.id === s.currentUserId)!);
+export const useCurrentUser = () => useStore((s) => s.users.find((u) => u.id === s.currentUserId)!);

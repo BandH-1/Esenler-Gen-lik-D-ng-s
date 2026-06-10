@@ -14,8 +14,7 @@ export function SafetyNote({ compact = false }: { compact?: boolean }) {
       <div
         className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-40 blur-2xl"
         style={{
-          background:
-            "radial-gradient(circle, var(--accent), transparent 70%)",
+          background: "radial-gradient(circle, var(--accent), transparent 70%)",
         }}
       />
       <div className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accent/20 text-accent">

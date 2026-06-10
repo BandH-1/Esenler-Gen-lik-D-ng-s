@@ -13,6 +13,23 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    build: {
+      chunkSizeWarningLimit: 600,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return undefined;
+            if (id.includes("react") || id.includes("scheduler") || id.includes("@tanstack")) {
+              return "vendor-core";
+            }
+            if (id.includes("@supabase") || id.includes("@lovable.dev")) {
+              return "vendor-platform";
+            }
+            return undefined;
+          },
+        },
+      },
+    },
     server: {
       port: 8081,
       strictPort: true,

@@ -304,7 +304,7 @@ export const items: Item[] = [
   },
   {
     id: "i-12",
-    title: "Eski Tablet (7\")",
+    title: 'Eski Tablet (7")',
     description: "Sadece okuma için uygun, batarya zayıf.",
     category: "elektronik",
     condition: "orta",

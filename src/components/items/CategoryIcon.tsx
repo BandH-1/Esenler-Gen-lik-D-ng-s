@@ -1,7 +1,7 @@
 import type { Category } from "@/lib/mock/types";
 import { BookOpen, Shirt, Pencil, Cpu, Dumbbell, Bed } from "lucide-react";
 
-export const CATEGORY_ICONS: Record<Category, typeof BookOpen> = {
+const CATEGORY_ICONS: Record<Category, typeof BookOpen> = {
   kitap: BookOpen,
   kiyafet: Shirt,
   okul: Pencil,
@@ -10,13 +10,7 @@ export const CATEGORY_ICONS: Record<Category, typeof BookOpen> = {
   yurt: Bed,
 };
 
-export function CategoryIcon({
-  category,
-  className,
-}: {
-  category: Category;
-  className?: string;
-}) {
+export function CategoryIcon({ category, className }: { category: Category; className?: string }) {
   const Icon = CATEGORY_ICONS[category];
   return <Icon className={className} />;
 }

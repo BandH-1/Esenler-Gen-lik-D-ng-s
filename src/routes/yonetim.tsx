@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Package,
@@ -34,11 +34,7 @@ import {
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useStore } from "@/lib/mock/store";
-import {
-  CATEGORY_LABELS,
-  HANDOVER_TYPE_LABELS,
-  type Category,
-} from "@/lib/mock/types";
+import { CATEGORY_LABELS, HANDOVER_TYPE_LABELS, type Category } from "@/lib/mock/types";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ImpactStat } from "@/components/common/ImpactStat";
@@ -57,6 +53,7 @@ import {
   monthlySummary,
   type EcoTx,
 } from "@/lib/eco-points";
+import { STAFF_ROLES, useAuth, useHasAnyRole } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/yonetim")({
   head: () => ({
@@ -73,6 +70,8 @@ export const Route = createFileRoute("/yonetim")({
 });
 
 function AdminPage() {
+  const { user: authUser, loading: authLoading } = useAuth();
+  const { data: hasStaffRole = false, isLoading: roleLoading } = useHasAnyRole(STAFF_ROLES);
   const items = useStore((s) => s.items);
   const requests = useStore((s) => s.requests);
   const reports = useStore((s) => s.reports);
@@ -94,6 +93,21 @@ function AdminPage() {
     .reduce((a, b) => a + b.points, 0);
   const reusedItems = completed + 121;
   const wastePrevented = (reusedItems * 1.4).toFixed(0);
+  const allowDemoAdmin = import.meta.env.DEV;
+  const checkingAccess = !allowDemoAdmin && (authLoading || (!!authUser && roleLoading));
+  const canAccessAdmin = allowDemoAdmin || (!!authUser && hasStaffRole);
+
+  if (checkingAccess) {
+    return (
+      <div className="py-12 text-center text-sm text-muted-foreground">
+        Yönetim yetkisi kontrol ediliyor…
+      </div>
+    );
+  }
+
+  if (!canAccessAdmin) {
+    return <AdminAccessDenied />;
+  }
 
   return (
     <div className="flex flex-col gap-5 py-4">
@@ -105,9 +119,7 @@ function AdminPage() {
           <h1 className="font-display text-2xl font-bold tracking-tight">
             Belediye Yönetim Paneli
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Esenler Belediyesi · eştakas
-          </p>
+          <p className="text-sm text-muted-foreground">Esenler Belediyesi · eştakas</p>
         </div>
       </div>
 
@@ -206,8 +218,7 @@ function AdminPage() {
 
     const neighborhoodCounts: Record<string, number> = {};
     items.forEach((i) => {
-      neighborhoodCounts[i.neighborhood] =
-        (neighborhoodCounts[i.neighborhood] ?? 0) + 1;
+      neighborhoodCounts[i.neighborhood] = (neighborhoodCounts[i.neighborhood] ?? 0) + 1;
     });
     const topNeighborhoods = Object.entries(neighborhoodCounts)
       .sort((a, b) => b[1] - a[1])
@@ -319,13 +330,9 @@ function AdminPage() {
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold">{u.name}</div>
-                      <div className="text-[10px] text-muted-foreground">
-                        {u.neighborhood}
-                      </div>
+                      <div className="text-[10px] text-muted-foreground">{u.neighborhood}</div>
                     </div>
-                    <span className="font-display font-bold text-accent">
-                      {u.ecoPointBalance}
-                    </span>
+                    <span className="font-display font-bold text-accent">{u.ecoPointBalance}</span>
                   </li>
                 ))}
             </ul>
@@ -385,10 +392,7 @@ function AdminPage() {
             <tbody>
               {filtered.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="p-6 text-center text-sm text-muted-foreground"
-                  >
+                  <td colSpan={6} className="p-6 text-center text-sm text-muted-foreground">
                     Bu filtrede ilan yok.
                   </td>
                 </tr>
@@ -404,9 +408,7 @@ function AdminPage() {
                       </div>
                     </td>
                     <td className="px-3 py-2 text-xs">{owner?.name ?? "—"}</td>
-                    <td className="px-3 py-2 text-xs">
-                      {CATEGORY_LABELS[i.category]}
-                    </td>
+                    <td className="px-3 py-2 text-xs">{CATEGORY_LABELS[i.category]}</td>
                     <td className="px-3 py-2 text-xs">{i.neighborhood}</td>
                     <td className="px-3 py-2">
                       <StatusBadge status={i.status} />
@@ -479,10 +481,7 @@ function AdminPage() {
           <tbody>
             {reports.length === 0 && (
               <tr>
-                <td
-                  colSpan={5}
-                  className="p-6 text-center text-sm text-muted-foreground"
-                >
+                <td colSpan={5} className="p-6 text-center text-sm text-muted-foreground">
                   Aktif şikayet yok.
                 </td>
               </tr>
@@ -555,14 +554,10 @@ function AdminPage() {
             <tbody>
               {requests.map((r) => {
                 const it = items.find((i) => i.id === r.itemId);
-                const hp = handoverPoints.find(
-                  (h) => h.id === r.handoverPointId,
-                );
+                const hp = handoverPoints.find((h) => h.id === r.handoverPointId);
                 return (
                   <tr key={r.id} className="border-t">
-                    <td className="px-3 py-2 font-medium">
-                      {it?.title ?? "—"}
-                    </td>
+                    <td className="px-3 py-2 font-medium">{it?.title ?? "—"}</td>
                     <td className="px-3 py-2">
                       <code className="rounded bg-secondary px-1.5 py-0.5 text-[11px]">
                         {r.qrCode}
@@ -580,9 +575,7 @@ function AdminPage() {
         </section>
 
         <section className="overflow-x-auto rounded-2xl border bg-card">
-          <h3 className="px-4 pt-3 text-sm font-semibold">
-            Güvenli Teslim Noktası Performansı
-          </h3>
+          <h3 className="px-4 pt-3 text-sm font-semibold">Güvenli Teslim Noktası Performansı</h3>
           <table className="mt-2 w-full text-sm">
             <thead className="bg-secondary/50 text-[11px] uppercase text-muted-foreground">
               <tr>
@@ -599,12 +592,8 @@ function AdminPage() {
                 <tr key={h.id} className="border-t">
                   <td className="px-3 py-2 font-medium">{h.name}</td>
                   <td className="px-3 py-2 text-xs">{h.neighborhood}</td>
-                  <td className="px-3 py-2 text-xs">
-                    {HANDOVER_TYPE_LABELS[h.type]}
-                  </td>
-                  <td className="px-3 py-2 text-right font-semibold text-accent">
-                    {h.completed}
-                  </td>
+                  <td className="px-3 py-2 text-xs">{HANDOVER_TYPE_LABELS[h.type]}</td>
+                  <td className="px-3 py-2 text-right font-semibold text-accent">{h.completed}</td>
                   <td className="px-3 py-2 text-right font-semibold text-warning-foreground">
                     {h.pending}
                   </td>
@@ -627,9 +616,7 @@ function AdminPage() {
     const { data: profilesMap = {} } = useQuery({
       queryKey: ["admin-profiles-map"],
       queryFn: async () => {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("id, full_name, email");
+        const { data, error } = await supabase.from("profiles").select("id, full_name, email");
         if (error) throw error;
         const m: Record<string, { name: string; email: string | null }> = {};
         (data ?? []).forEach((p) => {
@@ -735,13 +722,16 @@ function AdminPage() {
                 variant="outline"
                 disabled={!liveTx.length}
                 onClick={() => {
-                  downloadTxPdf(
+                  void downloadTxPdf(
                     `eko-puan-raporu-${new Date().toISOString().slice(0, 10)}.pdf`,
                     "Eko-Puan Islem ve Aylik Ozet Raporu",
                     exportRows,
                     summaryRows,
-                  );
-                  toast.success("PDF indiriliyor.");
+                  )
+                    .then(() => toast.success("PDF indiriliyor."))
+                    .catch((err) =>
+                      toast.error(err instanceof Error ? err.message : "PDF oluşturulamadı."),
+                    );
                 }}
               >
                 <FileText className="mr-1.5 h-3.5 w-3.5" /> PDF
@@ -749,9 +739,7 @@ function AdminPage() {
             </div>
           </div>
           {monthly.length === 0 ? (
-            <p className="text-xs text-muted-foreground">
-              Henüz işlem yok.
-            </p>
+            <p className="text-xs text-muted-foreground">Henüz işlem yok.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -769,21 +757,13 @@ function AdminPage() {
                   {monthly.map((m) => (
                     <tr key={m.month} className="border-t">
                       <td className="px-2 py-1.5 font-medium">{m.label}</td>
-                      <td className="px-2 py-1.5 text-right text-accent">
-                        +{m.earned}
-                      </td>
+                      <td className="px-2 py-1.5 text-right text-accent">+{m.earned}</td>
                       <td className="px-2 py-1.5 text-right text-warning-foreground">
                         {m.pending}
                       </td>
-                      <td className="px-2 py-1.5 text-right text-destructive">
-                        −{m.penalty}
-                      </td>
-                      <td className="px-2 py-1.5 text-right font-bold">
-                        {m.net}
-                      </td>
-                      <td className="px-2 py-1.5 text-right text-muted-foreground">
-                        {m.count}
-                      </td>
+                      <td className="px-2 py-1.5 text-right text-destructive">−{m.penalty}</td>
+                      <td className="px-2 py-1.5 text-right font-bold">{m.net}</td>
+                      <td className="px-2 py-1.5 text-right text-muted-foreground">{m.count}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -807,22 +787,16 @@ function AdminPage() {
             <tbody>
               {isLoading && (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="p-6 text-center text-sm text-muted-foreground"
-                  >
+                  <td colSpan={6} className="p-6 text-center text-sm text-muted-foreground">
                     Yükleniyor…
                   </td>
                 </tr>
               )}
               {!isLoading && liveTx.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="p-6 text-center text-sm text-muted-foreground"
-                  >
-                    Henüz Eko-Puan işlemi yok. (Staff yetkisi yoksa yalnızca
-                    kendi işlemlerin görünür.)
+                  <td colSpan={6} className="p-6 text-center text-sm text-muted-foreground">
+                    Henüz Eko-Puan işlemi yok. (Staff yetkisi yoksa yalnızca kendi işlemlerin
+                    görünür.)
                   </td>
                 </tr>
               )}
@@ -845,9 +819,7 @@ function AdminPage() {
                       {t.transaction_type === "penalty" ? "−" : "+"}
                       {t.points}
                     </td>
-                    <td className="px-3 py-2 text-xs">
-                      {TX_STATUS_LABELS[t.status]}
-                    </td>
+                    <td className="px-3 py-2 text-xs">{TX_STATUS_LABELS[t.status]}</td>
                     <td className="px-3 py-2">
                       <EsenlinkBadge sync={sync} />
                     </td>
@@ -870,9 +842,7 @@ function AdminPage() {
                           size="sm"
                           variant="outline"
                           onClick={() =>
-                            updateTxStatus(t, "failed").then(() =>
-                              toast("Puan donduruldu."),
-                            )
+                            updateTxStatus(t, "failed").then(() => toast("Puan donduruldu."))
                           }
                         >
                           <Snowflake className="h-3.5 w-3.5" />
@@ -881,11 +851,7 @@ function AdminPage() {
                           size="sm"
                           variant="outline"
                           className="text-destructive"
-                          onClick={() =>
-                            reverseTx(t).then(() =>
-                              toast("Puan geri alındı."),
-                            )
-                          }
+                          onClick={() => reverseTx(t).then(() => toast("Puan geri alındı."))}
                         >
                           <RotateCcw className="h-3.5 w-3.5" />
                         </Button>
@@ -901,17 +867,11 @@ function AdminPage() {
     );
   }
 
-
-
-
   function CommunityTab() {
-    const userName = (id: string) =>
-      users.find((u) => u.id === id)?.name ?? id.slice(0, 6);
+    const userName = (id: string) => users.find((u) => u.id === id)?.name ?? id.slice(0, 6);
     const bannedUsers = users.filter((u) => u.banned);
     const publishedCount = comments.filter((c) => c.status === "yayinda").length;
-    const blockedCount = moderationEvents.filter(
-      (e) => e.type === "engellendi",
-    ).length;
+    const blockedCount = moderationEvents.filter((e) => e.type === "engellendi").length;
     const TYPE_LABELS: Record<string, string> = {
       engellendi: "İçerik engellendi",
       ban: "Otomatik ban",
@@ -933,9 +893,7 @@ function AdminPage() {
             Askıya Alınan Hesaplar
           </h3>
           {bannedUsers.length === 0 ? (
-            <p className="text-xs text-muted-foreground">
-              Askıya alınmış hesap yok.
-            </p>
+            <p className="text-xs text-muted-foreground">Askıya alınmış hesap yok.</p>
           ) : (
             <div className="flex flex-col gap-2">
               {bannedUsers.map((u) => (
@@ -992,10 +950,7 @@ function AdminPage() {
             <tbody>
               {moderationEvents.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="p-6 text-center text-sm text-muted-foreground"
-                  >
+                  <td colSpan={5} className="p-6 text-center text-sm text-muted-foreground">
                     Henüz moderasyon kaydı yok.
                   </td>
                 </tr>
@@ -1068,16 +1023,12 @@ function AdminPage() {
             {users.map((u) => (
               <tr key={u.id} className="border-t">
                 <td className="px-3 py-2 font-medium">{u.name}</td>
-                <td className="px-3 py-2 text-xs capitalize">
-                  {u.schoolType.replace("-", " ")}
-                </td>
+                <td className="px-3 py-2 text-xs capitalize">{u.schoolType.replace("-", " ")}</td>
                 <td className="px-3 py-2 text-xs">{u.neighborhood}</td>
                 <td className="px-3 py-2">
                   <div className="flex flex-wrap items-center gap-1">
                     <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent">
-                      {u.verificationStatus === "dogrulanmis"
-                        ? "Doğrulandı"
-                        : "Bekliyor"}
+                      {u.verificationStatus === "dogrulanmis" ? "Doğrulandı" : "Bekliyor"}
                     </span>
                     {u.banned && (
                       <span className="rounded-full bg-destructive/15 px-2 py-0.5 text-[10px] font-semibold text-destructive">
@@ -1086,9 +1037,7 @@ function AdminPage() {
                     )}
                   </div>
                 </td>
-                <td className="px-3 py-2 text-right font-semibold">
-                  {u.trustScore}
-                </td>
+                <td className="px-3 py-2 text-right font-semibold">{u.trustScore}</td>
                 <td className="px-3 py-2 text-right font-display font-bold text-accent">
                   {u.ecoPointBalance}
                 </td>
@@ -1145,13 +1094,25 @@ function ExportButton({ label }: { label: string }) {
   );
 }
 
-function ChartCard({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactElement;
-}) {
+function AdminAccessDenied() {
+  return (
+    <div className="mx-auto flex max-w-md flex-col items-center gap-3 py-12 text-center">
+      <ShieldCheck className="h-10 w-10 text-muted-foreground" />
+      <h1 className="font-display text-xl font-bold">Yönetim erişimi gerekli</h1>
+      <p className="text-sm text-muted-foreground">
+        Bu panel yalnızca belediye yöneticileri ve yetkili personel için açıktır.
+      </p>
+      <Link
+        to="/auth"
+        className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:-translate-y-0.5"
+      >
+        Yetkili hesapla giriş yap
+      </Link>
+    </div>
+  );
+}
+
+function ChartCard({ title, children }: { title: string; children: React.ReactElement }) {
   return (
     <section className="rounded-2xl border bg-card p-4">
       <h2 className="mb-3 text-sm font-semibold">{title}</h2>

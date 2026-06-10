@@ -3,11 +3,7 @@ import { useState } from "react";
 import { ArrowLeft, MapPin, Clock, Flag, ShieldCheck, User2 } from "lucide-react";
 import { toast } from "sonner";
 import { useStore } from "@/lib/mock/store";
-import {
-  CATEGORY_LABELS,
-  CONDITION_LABELS,
-  HANDOVER_TYPE_LABELS,
-} from "@/lib/mock/types";
+import { CATEGORY_LABELS, CONDITION_LABELS, HANDOVER_TYPE_LABELS } from "@/lib/mock/types";
 import { CategoryIcon } from "@/components/items/CategoryIcon";
 import { StatusBadge } from "@/components/items/StatusBadge";
 import { EcoPointsBadge } from "@/components/items/EcoPointsBadge";
@@ -25,20 +21,22 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/ilanlar/$itemId")({
-  head: ({ loaderData }) => ({
-    meta: [
-      {
-        title: loaderData?.title
-          ? `${loaderData.title} — eştakas`
-          : "İlan — eştakas",
-      },
-      {
-        name: "description",
-        content:
-          "Esenler gençlerinin paylaştığı ücretsiz eşya. Belediye güvenli teslim noktasında QR ile teslim alınır.",
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const itemTitle = (loaderData as { title?: string } | undefined)?.title;
+
+    return {
+      meta: [
+        {
+          title: itemTitle ? `${itemTitle} — eştakas` : "İlan — eştakas",
+        },
+        {
+          name: "description",
+          content:
+            "Esenler gençlerinin paylaştığı ücretsiz eşya. Belediye güvenli teslim noktasında QR ile teslim alınır.",
+        },
+      ],
+    };
+  },
   component: ItemDetail,
   notFoundComponent: () => (
     <div className="py-12 text-center">
@@ -52,14 +50,10 @@ export const Route = createFileRoute("/ilanlar/$itemId")({
     </div>
   ),
   errorComponent: () => (
-    <div className="py-12 text-center text-sm text-muted-foreground">
-      Bir hata oluştu.
-    </div>
+    <div className="py-12 text-center text-sm text-muted-foreground">Bir hata oluştu.</div>
   ),
   loader: ({ params }) => {
-    const item = useStore
-      .getState()
-      .items.find((i) => i.id === params.itemId);
+    const item = useStore.getState().items.find((i) => i.id === params.itemId);
     return { itemId: params.itemId, title: item?.title };
   },
 });
@@ -69,9 +63,7 @@ function ItemDetail() {
   const navigate = useNavigate();
   const item = useStore((s) => s.items.find((i) => i.id === itemId));
   const owner = useStore((s) => s.users.find((u) => u.id === item?.ownerId));
-  const handover = useStore((s) =>
-    s.handoverPoints.find((h) => h.id === item?.handoverPointId),
-  );
+  const handover = useStore((s) => s.handoverPoints.find((h) => h.id === item?.handoverPointId));
   const currentUserId = useStore((s) => s.currentUserId);
   const me = useStore((s) => s.users.find((u) => u.id === s.currentUserId));
   const requestItem = useStore((s) => s.requestItem);
@@ -82,6 +74,8 @@ function ItemDetail() {
 
   if (!item) throw notFound();
 
+  const primaryImage = item.images[0] ?? "";
+  const hasPhoto = /^(blob:|data:image\/|https?:\/\/|\/)/.test(primaryImage);
   const isMine = item.ownerId === currentUserId;
   const isBanned = !!me?.banned;
   const canRequest = !isMine && item.status === "aktif" && !isBanned;
@@ -113,14 +107,23 @@ function ItemDetail() {
                 "radial-gradient(circle at 50% 40%, color-mix(in oklch, var(--accent) 20%, transparent), transparent 60%)",
             }}
           />
-          <span className="anim-float relative text-[140px] drop-shadow-md">
-            {item.images[0]}
-          </span>
+          {hasPhoto ? (
+            <img
+              src={primaryImage}
+              alt={item.title}
+              className="relative h-full w-full object-cover"
+            />
+          ) : (
+            <span className="anim-float relative text-[140px] drop-shadow-md">{primaryImage}</span>
+          )}
         </div>
 
         {/* Info */}
         <div className="flex flex-col gap-3">
-          <div className="anim-fade-up flex flex-wrap items-center gap-2" style={{ animationDelay: "60ms" }}>
+          <div
+            className="anim-fade-up flex flex-wrap items-center gap-2"
+            style={{ animationDelay: "60ms" }}
+          >
             <StatusBadge status={item.status} />
             <EcoPointsBadge points={item.ecoPointReward} />
             <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold">
@@ -128,14 +131,23 @@ function ItemDetail() {
               {CATEGORY_LABELS[item.category]}
             </span>
           </div>
-          <h1 className="anim-fade-up font-display text-2xl font-bold leading-tight tracking-tight" style={{ animationDelay: "120ms" }}>
+          <h1
+            className="anim-fade-up font-display text-2xl font-bold leading-tight tracking-tight"
+            style={{ animationDelay: "120ms" }}
+          >
             {item.title}
           </h1>
-          <p className="anim-fade-up text-sm leading-relaxed text-muted-foreground" style={{ animationDelay: "170ms" }}>
+          <p
+            className="anim-fade-up text-sm leading-relaxed text-muted-foreground"
+            style={{ animationDelay: "170ms" }}
+          >
             {item.description}
           </p>
 
-          <dl className="anim-fade-up grid grid-cols-2 gap-2 rounded-2xl border bg-card/80 p-3 text-xs shadow-soft backdrop-blur-sm" style={{ animationDelay: "220ms" }}>
+          <dl
+            className="anim-fade-up grid grid-cols-2 gap-2 rounded-2xl border bg-card/80 p-3 text-xs shadow-soft backdrop-blur-sm"
+            style={{ animationDelay: "220ms" }}
+          >
             <Row label="Durum">{CONDITION_LABELS[item.condition]}</Row>
             <Row label="Mahalle">{item.neighborhood}</Row>
             {item.attributes &&
@@ -148,11 +160,16 @@ function ItemDetail() {
 
           {/* Owner */}
           {owner && (
-            <div className="anim-fade-up flex items-center gap-3 rounded-2xl border bg-card/80 p-3 shadow-soft backdrop-blur-sm" style={{ animationDelay: "270ms" }}>
+            <div
+              className="anim-fade-up flex items-center gap-3 rounded-2xl border bg-card/80 p-3 shadow-soft backdrop-blur-sm"
+              style={{ animationDelay: "270ms" }}
+            >
               <div
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-soft leading-none"
                 style={{ backgroundColor: owner.avatarColor }}
-              >{owner.name[0]}</div>
+              >
+                {owner.name[0]}
+              </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 text-sm font-semibold">
                   {owner.name}
@@ -169,7 +186,10 @@ function ItemDetail() {
 
           {/* Handover */}
           {handover && (
-            <div className="anim-fade-up rounded-2xl border bg-card/80 p-3 shadow-soft backdrop-blur-sm" style={{ animationDelay: "320ms" }}>
+            <div
+              className="anim-fade-up rounded-2xl border bg-card/80 p-3 shadow-soft backdrop-blur-sm"
+              style={{ animationDelay: "320ms" }}
+            >
               <div className="mb-1 flex items-center gap-2 text-sm font-semibold">
                 <MapPin className="h-4 w-4 text-primary" />
                 {handover.name}
@@ -237,7 +257,13 @@ function ItemDetail() {
                   ? "Talep Et"
                   : "Talep edilemez"}
           </Button>
-          <Button variant="outline" size="icon" onClick={() => setReportOpen(true)}>
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label="İlanı bildir"
+            title="İlanı bildir"
+            onClick={() => setReportOpen(true)}
+          >
             <Flag className="h-4 w-4" />
           </Button>
         </div>
@@ -249,8 +275,8 @@ function ItemDetail() {
           <DialogHeader>
             <DialogTitle>Talebini onayla</DialogTitle>
             <DialogDescription>
-              Bu eşyayı belediyenin güvenli teslim noktasında almayı kabul
-              ediyorum. Hiçbir ödeme yapılmayacak.
+              Bu eşyayı belediyenin güvenli teslim noktasında almayı kabul ediyorum. Hiçbir ödeme
+              yapılmayacak.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2 rounded-xl border bg-secondary/40 p-3 text-xs">
@@ -277,13 +303,12 @@ function ItemDetail() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>İlanı bildir</DialogTitle>
-            <DialogDescription>
-              Bildirimin belediye moderasyon ekibine iletilir.
-            </DialogDescription>
+            <DialogDescription>Bildirimin belediye moderasyon ekibine iletilir.</DialogDescription>
           </DialogHeader>
           <textarea
             value={reportText}
             onChange={(e) => setReportText(e.target.value)}
+            aria-label="Bildirim sebebi"
             className="min-h-[100px] w-full rounded-xl border bg-card p-3 text-sm outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-ring/40"
             placeholder="Sebep yaz..."
           />
@@ -312,9 +337,7 @@ function ItemDetail() {
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </dt>
+      <dt className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</dt>
       <dd className="font-medium">{children}</dd>
     </div>
   );

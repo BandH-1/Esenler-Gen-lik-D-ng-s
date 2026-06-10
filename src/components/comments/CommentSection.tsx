@@ -74,8 +74,8 @@ export function CommentSection({ itemId }: { itemId: string }) {
       <div className="flex items-start gap-2 rounded-2xl bg-accent/10 p-3 text-[11px] leading-relaxed text-accent-foreground ring-1 ring-accent/20">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
         <span>
-          Saygılı ol. <b>Satış, ödeme, telefon/adres paylaşımı ve hakaret yasaktır</b> —
-          bu tür içerikler otomatik engellenir, tekrarı hesabını askıya alır.
+          Saygılı ol. <b>Satış, ödeme, telefon/adres paylaşımı ve hakaret yasaktır</b> — bu tür
+          içerikler otomatik engellenir, tekrarı hesabını askıya alır.
         </span>
       </div>
 
@@ -88,9 +88,8 @@ export function CommentSection({ itemId }: { itemId: string }) {
           <div className="text-sm">
             <p className="font-semibold text-destructive">Hesabın askıya alındı</p>
             <p className="mt-0.5 text-muted-foreground">
-              {me.banReason ??
-                "Topluluk kurallarını ihlal ettiğin için yorum yapamazsın."}{" "}
-              İtiraz için belediye moderasyon ekibiyle iletişime geçebilirsin.
+              {me.banReason ?? "Topluluk kurallarını ihlal ettiğin için yorum yapamazsın."} İtiraz
+              için belediye moderasyon ekibiyle iletişime geçebilirsin.
             </p>
           </div>
         </div>
@@ -111,6 +110,7 @@ export function CommentSection({ itemId }: { itemId: string }) {
                   if (feedback) setFeedback(null);
                 }}
                 rows={2}
+                aria-label="Yorum yaz"
                 placeholder="Ürün hakkında bir soru sor veya yorum yaz..."
                 className="w-full resize-none rounded-2xl border bg-background/60 p-3 text-sm outline-none transition-all duration-300 focus:border-primary/40 focus:ring-2 focus:ring-ring/40"
               />
@@ -166,9 +166,7 @@ export function CommentSection({ itemId }: { itemId: string }) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-sm font-semibold">
-                      {author?.name ?? "Bilinmeyen"}
-                    </span>
+                    <span className="text-sm font-semibold">{author?.name ?? "Bilinmeyen"}</span>
                     {author?.verificationStatus === "dogrulanmis" && (
                       <ShieldCheck className="h-3.5 w-3.5 text-accent" />
                     )}

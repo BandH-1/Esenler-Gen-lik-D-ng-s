@@ -1,13 +1,7 @@
 import { Coins } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function EcoPointsBadge({
-  points,
-  className,
-}: {
-  points: number;
-  className?: string;
-}) {
+export function EcoPointsBadge({ points, className }: { points: number; className?: string }) {
   return (
     <span
       className={cn(

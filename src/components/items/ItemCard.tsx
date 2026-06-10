@@ -8,9 +8,10 @@ import { EcoPointsBadge } from "./EcoPointsBadge";
 import { useStore } from "@/lib/mock/store";
 
 export function ItemCard({ item }: { item: Item }) {
-  const handover = useStore((s) =>
-    s.handoverPoints.find((h) => h.id === item.handoverPointId),
-  );
+  const handover = useStore((s) => s.handoverPoints.find((h) => h.id === item.handoverPointId));
+  const primaryImage = item.images[0] ?? "";
+  const hasPhoto = /^(blob:|data:image\/|https?:\/\/|\/)/.test(primaryImage);
+
   return (
     <Link
       to="/ilanlar/$itemId"
@@ -26,9 +27,17 @@ export function ItemCard({ item }: { item: Item }) {
               "radial-gradient(circle at 50% 45%, color-mix(in oklch, var(--accent) 16%, transparent), transparent 65%)",
           }}
         />
-        <span className="relative text-6xl drop-shadow-sm transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110 group-hover:-rotate-3">
-          {item.images[0]}
-        </span>
+        {hasPhoto ? (
+          <img
+            src={primaryImage}
+            alt={item.title}
+            className="relative h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-105"
+          />
+        ) : (
+          <span className="relative text-6xl drop-shadow-sm transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110 group-hover:-rotate-3">
+            {primaryImage}
+          </span>
+        )}
         <div className="absolute left-2 top-2 flex flex-wrap gap-1">
           <StatusBadge status={item.status} />
         </div>

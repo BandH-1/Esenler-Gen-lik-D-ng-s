@@ -83,8 +83,7 @@ function Home() {
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.15]"
           style={{
-            backgroundImage:
-              "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)",
             backgroundSize: "22px 22px",
             maskImage: "radial-gradient(ellipse at 70% 0%, black, transparent 75%)",
           }}
@@ -100,8 +99,7 @@ function Home() {
             <span className="text-white/95">bir gencin ihtiyacına dönüşsün.</span>
           </h1>
           <p className="mt-3 max-w-md text-sm text-primary-foreground/85 sm:text-base">
-            Esenler'in ücretsiz, güvenli ve sürdürülebilir gençlik takas
-            platformu.
+            Esenler'in ücretsiz, güvenli ve sürdürülebilir gençlik takas platformu.
           </p>
           <p className="mt-2 inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-primary-foreground/70">
             <span>Satış yok</span>
@@ -179,9 +177,7 @@ function Home() {
       {/* How it works */}
       <section>
         <Reveal>
-          <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
-            Nasıl çalışır?
-          </h2>
+          <h2 className="mb-3 text-sm font-semibold text-muted-foreground">Nasıl çalışır?</h2>
         </Reveal>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {HOW_IT_WORKS.map((step, i) => {
@@ -209,9 +205,7 @@ function Home() {
       {/* Categories */}
       <section>
         <Reveal>
-          <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
-            Kategoriler
-          </h2>
+          <h2 className="mb-3 text-sm font-semibold text-muted-foreground">Kategoriler</h2>
         </Reveal>
         <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6">
           {(Object.keys(CATEGORY_LABELS) as Category[]).map((c, i) => (
@@ -224,9 +218,7 @@ function Home() {
                 <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                   <CategoryIcon category={c} className="h-5 w-5" />
                 </div>
-                <div className="text-[11px] font-medium leading-tight">
-                  {CATEGORY_LABELS[c]}
-                </div>
+                <div className="text-[11px] font-medium leading-tight">{CATEGORY_LABELS[c]}</div>
               </Link>
             </Reveal>
           ))}
@@ -237,9 +229,7 @@ function Home() {
       <section>
         <Reveal>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-muted-foreground">
-              Öne çıkan ilanlar
-            </h2>
+            <h2 className="text-sm font-semibold text-muted-foreground">Öne çıkan ilanlar</h2>
             <Link
               to="/ilanlar"
               className="group inline-flex items-center gap-1 text-xs font-semibold text-primary"

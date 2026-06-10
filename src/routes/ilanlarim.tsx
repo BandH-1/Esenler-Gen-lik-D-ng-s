@@ -9,12 +9,7 @@ import { Reveal } from "@/components/common/Reveal";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/items/StatusBadge";
 import { type Item, type Category } from "@/lib/mock/types";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const CATEGORY_EMOJIS: Record<Category, string[]> = {
   kitap: ["📚", "📖", "📓", "📝", "✍️"],
@@ -24,6 +19,8 @@ const CATEGORY_EMOJIS: Record<Category, string[]> = {
   spor: ["⚽", "🏀", "🛹", "🥋", "🏸", "🏋️"],
   yurt: ["🛏️", "🛋️", "🧴", "☕", "🔌", "🪞"],
 };
+
+const isPhotoValue = (value: string) => /^(blob:|data:image\/|https?:\/\/|\/)/.test(value);
 
 export const Route = createFileRoute("/ilanlarim")({
   head: () => ({
@@ -68,9 +65,7 @@ function MyListings() {
       <div className="anim-fade-up flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold tracking-tight">İlanlarım</h1>
-          <p className="text-sm text-muted-foreground">
-            {mine.length} ilan · durumlarını takip et
-          </p>
+          <p className="text-sm text-muted-foreground">{mine.length} ilan · durumlarını takip et</p>
         </div>
         <Link
           to="/esya-ekle"
@@ -127,13 +122,25 @@ function MyListings() {
           {editingItem && (
             <div className="flex flex-col gap-4 py-3">
               <div className="flex items-center gap-3 bg-secondary/35 p-3 rounded-2xl border">
-                <div className="text-4xl">{editingItem.images[0]}</div>
+                <div className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-background text-4xl">
+                  {isPhotoValue(editingItem.images[0] ?? "") ? (
+                    <img
+                      src={editingItem.images[0]}
+                      alt={editingItem.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    editingItem.images[0]
+                  )}
+                </div>
                 <div>
                   <div className="font-semibold text-sm">{editingItem.title}</div>
-                  <div className="text-[10px] text-muted-foreground">Kategori: {editingItem.category}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    Kategori: {editingItem.category}
+                  </div>
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
                   Yeni Temsili Görsel Seçin

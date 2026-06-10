@@ -23,9 +23,7 @@ function HandoverPointsPage() {
   return (
     <div className="flex flex-col gap-4 py-4">
       <div className="anim-fade-up">
-        <h1 className="font-display text-2xl font-bold tracking-tight">
-          Güvenli Teslim Noktaları
-        </h1>
+        <h1 className="font-display text-2xl font-bold tracking-tight">Güvenli Teslim Noktaları</h1>
         <p className="text-sm text-muted-foreground">
           Tüm takaslar bu belediye noktalarında, QR onayıyla tamamlanır.
         </p>
@@ -51,9 +49,7 @@ function HandoverPointsPage() {
         <div className="relative rounded-2xl bg-card/70 px-4 py-3 text-center shadow-soft backdrop-blur">
           <Navigation className="mx-auto mb-1 h-6 w-6 text-primary" />
           <div className="text-sm font-semibold">Esenler · Harita</div>
-          <div className="text-[11px] text-muted-foreground">
-            Harita görünümü yakında
-          </div>
+          <div className="text-[11px] text-muted-foreground">Harita görünümü yakında</div>
         </div>
       </div>
 

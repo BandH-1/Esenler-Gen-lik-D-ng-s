@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const prefersReduced = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 /**
  * Animates a number from 0 → value once it scrolls into view.
@@ -25,8 +24,7 @@ export function CountUp({
 }) {
   const target = typeof value === "string" ? parseFloat(value) : value;
   const safeTarget = Number.isFinite(target) ? target : 0;
-  const inferredDecimals =
-    decimals || (typeof value === "string" && value.includes(".") ? 1 : 0);
+  const inferredDecimals = decimals || (typeof value === "string" && value.includes(".") ? 1 : 0);
 
   const ref = useRef<HTMLSpanElement | null>(null);
   const [display, setDisplay] = useState(safeTarget);
@@ -71,7 +69,6 @@ export function CountUp({
     );
     io.observe(el);
     return () => io.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [safeTarget, duration]);
 
   const formatted =

@@ -1,12 +1,6 @@
 import type { ViolationType } from "@/lib/moderation";
 
-export type Category =
-  | "kitap"
-  | "kiyafet"
-  | "okul"
-  | "elektronik"
-  | "spor"
-  | "yurt";
+export type Category = "kitap" | "kiyafet" | "okul" | "elektronik" | "spor" | "yurt";
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   kitap: "Kitap & Sınav Kaynakları",
